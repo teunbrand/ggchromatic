@@ -63,7 +63,7 @@ chromatic_scale <- function(
     limits <- trans$transform(limits)
   }
 
-  channel_limits <- channel_limits %||% vec_cast(c(0, 1), prototype())
+  channel_limits <- check_channel_limits(channel_limits, prototype)
 
   ggproto(
     NULL, super,
@@ -88,7 +88,7 @@ chromatic_scale <- function(
     labels = labels,
     guide = guide,
     ptype = prototype,
-    channel_limits = channel_limits %||% vec_cast(c(0, 1), prototype())
+    channel_limits = channel_limits
   )
 }
 
@@ -301,4 +301,29 @@ check_breaks_labels <- function(breaks, labels) {
     rlang::abort("`breaks` and `labels` must have the same length.")
   }
   TRUE
+}
+
+check_channel_limits <- function(x, ptype) {
+  fields <- fields(ptype())
+  if (!is_colour_spec(x)) {
+    defaults <- setNames(rep(list(c(0, 1)), length(fields)), fields)
+    if (!is.null(x)) {
+      common_fields <- intersect(fields, fields(x))
+      for (f in common_fields) {
+        vec_assert(x[[f]], size = 2, arg = "channel_limits")
+      }
+      defaults[common_fields] <- x[common_fields]
+    }
+    x <- defaults
+  } else {
+    vec_assert(x, size = 2)
+    if (!inherits(x, class(ptype()))) {
+      rlang::abort(glue::glue(
+        "Channel limits are class {class(x)[[1]]} but should of class {class(ptype())[[1]]}"
+      ))
+    }
+    x <- vec_data(x)
+  }
+  x <- lapply(x, oob_squish)
+  vec_restore(x, ptype())
 }
