@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![R-CMD-check](https://github.com/teunbrand/ggchromatic/workflows/R-CMD-check/badge.svg)](https://github.com/teunbrand/ggchromatic/actions)
 <!-- badges: end -->
 
 The 'ggchromatic' package provides additional colour and fill scales to use with 'ggplot2' It uses the 'ggplot2' extension system to map a number of variables to different colour spaces with the 'farver' package. The package introduces 'chromatic scales', a term mirroring music terms. In music, chromatic scales cover all 12 notes. In ggchromatic, a chromatic scale can cover all channels in colour space.
