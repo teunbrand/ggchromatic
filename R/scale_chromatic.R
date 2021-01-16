@@ -52,7 +52,7 @@ chromatic_scale <- function(
 ) {
   aesthetics <- standardise_aes_names(aesthetics)
 
-  ggplot2:::check_breaks_labels(breaks, labels)
+  check_breaks_labels(breaks, labels)
 
   if (is.null(breaks)) {
     guide <- "none"
@@ -286,4 +286,19 @@ in_transform_space <- function(x, trans, FUN, ...) {
   } else {
     trans$transform(FUN(trans$inverse(x), ...))
   }
+}
+
+check_breaks_labels <- function(breaks, labels) {
+  if (is.null(breaks)) {
+    return(TRUE)
+  }
+  if (is.null(labels)) {
+    return(TRUE)
+  }
+  bad_labels <- is.atomic(breaks) && is.atomic(labels) &&
+    length(breaks) != length(labels)
+  if (bad_labels) {
+    rlang::abort("`breaks` and `labels` must have the same length.")
+  }
+  TRUE
 }

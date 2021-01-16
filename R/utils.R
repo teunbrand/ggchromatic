@@ -1,8 +1,18 @@
-
 # Pad vector with NAs until size
+
+#' Pad with NAs
+#'
+#' This is a simple helper for some of the internals.
+#'
+#' @param x The object to pad.
+#' @param size To what length to pad.
+#'
+#' @return A vector of length `size` or list wherein elements are of length
+#'   `size`.
 #' @export
-#' @noRd
-#' @keywords internal
+#'
+#' @examples
+#' pad_nas(1, 2)
 pad_nas <- function(x, size) {
   UseMethod("pad_nas", x)
 }
@@ -24,10 +34,17 @@ pad_nas.list <- function(x, size = max(lengths(x))) {
   lapply(x, pad_nas, size = size)
 }
 
-# Return vector without NAs
+#' Remove the NAs
+#'
+#' This is a simple helper for some of the internals.
+#'
+#' @param x A vector or `list` to remove the `NA`s from.
+#'
+#' @return A vector or `list` without `NA`s.
 #' @export
-#' @noRd
-#' @keywords internal
+#'
+#' @examples
+#' without_nas(c(NA, 2))
 without_nas <- function(x) {
   UseMethod("without_nas", x)
 }
