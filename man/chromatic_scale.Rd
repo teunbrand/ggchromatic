@@ -38,7 +38,21 @@ vector should return a vector of colours.}
 mapping used for that aesthetic. If \code{NULL}, the legend title will be
 omitted.}
 
-\item{breaks}{NOT IMPLEMENTED YET}
+\item{breaks}{One of \itemize{
+\item \code{NULL} for no breaks.
+\item \code{waiver()} for the default breaks computed by the
+\href{scales::trans_new()}{transformation object}.
+\item A \code{colour_spec} vector. For continuous channels, must be a numeric
+channel. For discrete channels, a character channel. Channels can be padded
+with \code{NA}s if the desired breaks are of unequal length.
+\item A \code{function} that uses the limits as input and returns breaks. Note
+that this is used for both continuous and discrete channels.
+\item A named \code{list} with the names of channels with (1) a \code{character}
+or \code{numeric} vector giving the breaks for that channel or (2) a function to
+be applied to the limits of that channel or (3) \code{NULL} for no breaks in
+that channel. Channel names not in the \code{list}'s names defer to the
+\code{waiver()} option.
+}}
 
 \item{n.breaks}{An integer guiding the number of major breaks. The algorithm
 may choose a slightly different number to ensure nice break labels. Will
@@ -48,15 +62,17 @@ number of breaks given by the transformation.}
 \item{labels}{NOT IMPLEMENTED YET}
 
 \item{limits}{One of \itemize{
-\item \code{NULL} to use the default scale range
+\item \code{NULL} to use the default scale range.
 \item A \code{colour_spec} vector. For continuous channels, must be a length 2
 vector giving the minimum and maximum. For discrete channels, the relevant
 channel should define possible values. For mixed usage, the continuous
 limits can be padded with \code{NA}s.
 \item A \code{function} that accepts the existing (automatic) limits and returns
-new limits.
-\item A named \code{list} with names of the channels with one of the above per
-channel.
+new limits. Note that this is used for both continuous and discrete
+channels.
+\item A named \code{list} with names of channels with (1) a vector defining
+the limits or (2) a function to be applied to the natural limits. Channel
+names not in the \code{list}'s names defer to the \code{NULL} option.
 }}
 
 \item{rescaler}{A function used to scale the input values to the

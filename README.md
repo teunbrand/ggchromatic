@@ -43,9 +43,10 @@ ggplot(mtcars, aes(mpg, disp)) +
   geom_point(aes(colour = rgb_spec(mpg, drat, wt)))
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" /> The
-associated scale functions give more options for customisation, like the
-HSV scale below.
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+
+The associated scale functions give more options for customisation, like
+the HSV scale below.
 
 ``` r
 df <- data.frame(
@@ -58,7 +59,7 @@ ggplot(df, aes(x, y, fill = hsv_spec(z, x, y))) +
   geom_raster() +
   scale_fill_hsv(limits = list(h = c(NA, 170)),
                  oob = scales::oob_squish,
-                 channel_limits = hsv_spec(c(0, 0.8), c(0, 1), c(0, 1))) +
+                 channel_limits = list(h = c(0, 0.8))) +
   coord_equal()
 ```
 

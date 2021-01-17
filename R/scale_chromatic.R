@@ -8,18 +8,34 @@
 #' @inheritParams ggplot2::continuous_scale
 #' @param palette A palette function that when called with a `colour_spec`
 #'   vector should return a vector of colours.
-#' @param breaks NOT IMPLEMENTED YET
+#' @param breaks One of \itemize{
+#'   \item `NULL` for no breaks.
+#'   \item `waiver()` for the default breaks computed by the
+#'   [transformation object](scales::trans_new()).
+#'   \item A `colour_spec` vector. For continuous channels, must be a numeric
+#'   channel. For discrete channels, a character channel. Channels can be padded
+#'   with `NA`s if the desired breaks are of unequal length.
+#'   \item A `function` that uses the limits as input and returns breaks. Note
+#'   that this is used for both continuous and discrete channels.
+#'   \item A named `list` with the names of channels with (1) a `character`
+#'   or `numeric` vector giving the breaks for that channel or (2) a function to
+#'   be applied to the limits of that channel or (3) `NULL` for no breaks in
+#'   that channel. Channel names not in the `list`'s names defer to the
+#'   `waiver()` option.
+#' }
 #' @param labels NOT IMPLEMENTED YET
 #' @param limits One of \itemize{
-#'  \item `NULL` to use the default scale range
+#'  \item `NULL` to use the default scale range.
 #'  \item A `colour_spec` vector. For continuous channels, must be a length 2
 #'  vector giving the minimum and maximum. For discrete channels, the relevant
 #'  channel should define possible values. For mixed usage, the continuous
 #'  limits can be padded with `NA`s.
 #'  \item A `function` that accepts the existing (automatic) limits and returns
-#'  new limits.
-#'  \item A named `list` with names of the channels with one of the above per
-#'  channel.
+#'  new limits. Note that this is used for both continuous and discrete
+#'  channels.
+#'  \item A named `list` with names of channels with (1) a vector defining
+#'  the limits or (2) a function to be applied to the natural limits. Channel
+#'  names not in the `list`'s names defer to the `NULL` option.
 #' }
 #' @param prototype A `function` that serves as constructor for the specific
 #'   `colour_spec` class.
@@ -140,32 +156,30 @@ ScaleChromatic <- ggproto(
 
   rescale = function(self, x, limits = self$get_limits(),
                      channel_limits = self$channel_limits) {
-
-    # Loop through fields, apply `self$rescaler()` if continuous
+    discrete <- channel_is_discrete(x)
+    void <- channel_is_void(x)
     fields <- fields(limits)
-    for (f in fields(limits)) {
-      lim <- without_nas(field(limits, f))
-      if (is_discrete(field(x, f)) && !is_void_channel(field(x, f))) {
-        y <- self$rescaler(match(field(x, f), lim),
-                      to = field(channel_limits, f),
-                      from = c(1, length(field(limits, f))))
-      } else {
-        y <- self$rescaler(field(x, f), to = field(channel_limits, f),
-                           from = lim)
-      }
-      field(x, f) <- y
+    limits <- without_nas(as.list(vec_data(limits)))
+    # Loop through discrete fields, match to limits
+    for (f in fields[discrete & !void]) {
+      field(x, f) <- self$rescaler(match(field(x, f), limits[[f]]),
+                                   to = field(channel_limits, f),
+                                   from = c(1, length(limits[[f]])))
+    }
+    # Loop through fields, apply `self$rescaler()` if continuous or void
+    for (f in fields[!(discrete & !void)]) {
+      field(x, f) <- self$rescaler(field(x, f), to = field(channel_limits, f),
+                                   from = limits[[f]])
     }
     x
   },
 
-  apply_oob = function(self, x, limits = self$get_limits(), oob = self$oob) {
+  apply_oob = function(self, x, limits = self$get_limits(),
+                       oob = self$oob) {
     # Wrapper for `self$oob()`, apply to continuous fields only
-    channels <- fields(limits)
-    for (chan in channels) {
-      y <- field(x, chan)
-      if (!is_discrete(y)) {
-        field(x, chan) <- oob(y, range = without_nas(field(limits, chan)))
-      }
+    discrete <- channel_is_discrete(limits)
+    for (f in fields(limits)[!discrete]) {
+      field(x, f) <- oob(field(x, f), range = without_nas(field(limits, f)))
     }
     return(x)
   },
@@ -183,7 +197,7 @@ ScaleChromatic <- ggproto(
 
   transform = function(self, x) {
     if (is_colour_spec(x)) {
-      discrete <- vapply(vec_data(x), is_discrete, logical(1))
+      discrete <- channel_is_discrete(x)
       for (channel in fields(x)[!discrete]) {
         field(x, channel) <- self$trans$transform(field(x, channel))
       }
@@ -249,7 +263,7 @@ ScaleChromatic <- ggproto(
     if (!vec_is(lim, self$ptype())) {
       lim <- do.call(self$ptype, pad_nas(lim))
     }
-    continuous <- fields(lim)[!vapply(lim, is_discrete, logical(1))]
+    continuous <- fields(lim)[!channel_is_discrete(lim)]
     for (f in continuous) {
       x <- field(lim, f)[1:2]
       x <- ifelse(is.na(x), field(range, f)[1:2], x)
@@ -257,6 +271,76 @@ ScaleChromatic <- ggproto(
     }
 
     lim
+  },
+
+  get_breaks = function(self, limits = self$get_limits()) {
+    if (self$is_empty()) {
+      return(NULL)
+    }
+    if (is.null(self$breaks)) {
+      return(NULL)
+    }
+    if (!is.list(self$breaks) && !is.function(self$breaks) &&
+        is.na(self$breaks)) {
+      rlang::abort("Invalid breaks specification. Use `NULL` not `NA`.")
+    }
+
+    breaks <- channels_apply_c(limits, self$trans$inverse)
+    breaks <- without_nas(as.list(vec_data(breaks)))
+    breaks <- breaks[lengths(breaks) > 0] # Remove void channels (all NAs)
+
+    disc <- vapply(breaks, is_discrete, logical(1))
+    calc <- rep(TRUE, length(breaks))
+
+    # Apply zero range ~ lower limit
+    zerorange <- setNames(rep(FALSE, length(breaks)), names(breaks))
+    zerorange[!disc & calc] <- vapply(breaks[!disc & calc],
+                                      zero_range, logical(1))
+    breaks[zerorange] <- lapply(breaks[zerorange], `[[`, 1)
+    calc[zerorange | disc] <- FALSE
+
+    if (inherits(self$breaks, "waiver")) {
+      # Use trans to calculate breaks for continuous variables
+      breaks[calc] <- breaks_from_trans(breaks[calc], self$trans,
+                                        self$n.breaks)
+    } else if (is.function(self$breaks)) {
+      breaks[!zerorange] <- lapply(breaks[!zerorange], self$breaks)
+    } else if (is.list(self$breaks)) {
+      # rlang::abort("List breaks not implemented yet")
+      fields <- names(breaks)
+      is_defined <- fields %in% names(self$breaks)
+      # Undefined breaks: use trans breaks
+      breaks[calc & !is_defined] <- breaks_from_trans(
+        breaks[calc & !is_defined], self$trans, self$n.breaks
+      )
+      defined <- self$breaks[names(self$breaks) %in% fields[is_defined]]
+      breaks[is_defined] <- lapply(
+        setNames(nm = fields[is_defined]), function(f) {
+          brk <- defined[[f]]
+          if (is.null(brk)) {
+            return(new_void_channel(1))
+          } else if (is.function(brk)) {
+            if (!zerorange[[f]]) {
+              brk(breaks[[f]])
+            } else {
+              breaks[[f]]
+            }
+          } else {
+            brk
+          }
+        })
+    } else {
+      breaks <- without_nas(as.list(vec_data(self$breaks)))
+    }
+
+    breaks[!disc] <- lapply(breaks[!disc], self$trans$transform)
+
+    breaks <- do.call(self$ptype, pad_nas(breaks))
+
+    breaks <- self$apply_oob(breaks, limits, oob = oob_censor)
+
+    breaks
+
   },
 
   print = function(self, ...) {
@@ -288,6 +372,14 @@ in_transform_space <- function(x, trans, FUN, ...) {
   }
 }
 
+breaks_from_trans <- function(limits, trans, n.breaks = NULL) {
+  if (!is.null(n.breaks) && "n" %in% names(formals(trans$breaks))) {
+    lapply(limits, trans$breaks, n = n.breaks)
+  } else {
+    lapply(limits, trans$breaks)
+  }
+}
+
 check_breaks_labels <- function(breaks, labels) {
   if (is.null(breaks)) {
     return(TRUE)
@@ -295,8 +387,23 @@ check_breaks_labels <- function(breaks, labels) {
   if (is.null(labels)) {
     return(TRUE)
   }
-  bad_labels <- is.atomic(breaks) && is.atomic(labels) &&
-    length(breaks) != length(labels)
+  if (inherits(breaks, "waiver")) {
+    return(TRUE)
+  }
+  if (inherits(labels, "waiver")) {
+    return(TRUE)
+  }
+
+  if (is.list(breaks) && is.list(labels)) {
+    bad_labels <- mapply(function(x, y) {
+      is.atomic(x) && is.atomic(y) && length(x) != length(y)
+    }, x = breaks, y = labels, SIMPLIFY = FALSE)
+    bad_labels <- any(do.call(c, bad_labels))
+  } else {
+    bad_labels <- is.atomic(breaks) && is.atomic(labels) &&
+      length(breaks) != length(labels)
+  }
+
   if (bad_labels) {
     rlang::abort("`breaks` and `labels` must have the same length.")
   }
@@ -306,13 +413,11 @@ check_breaks_labels <- function(breaks, labels) {
 check_channel_limits <- function(x, ptype) {
   fields <- fields(ptype())
   if (!is_colour_spec(x)) {
-    defaults <- setNames(rep(list(c(0, 1)), length(fields)), fields)
+    defaults <- vec_set_names(rep(list(c(0, 1)), length(fields)), fields)
     if (!is.null(x)) {
       common_fields <- intersect(fields, fields(x))
-      for (f in common_fields) {
-        vec_assert(x[[f]], size = 2, arg = "channel_limits")
-      }
-      defaults[common_fields] <- x[common_fields]
+      defaults[common_fields] <- vec_recycle_common(!!!x[common_fields],
+                                                    .size = 2)
     }
     x <- defaults
   } else {

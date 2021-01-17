@@ -36,8 +36,16 @@ is_colour_spec <- function(x) {
 
 # Utilities ---------------------------------------------------------------
 
+channel_is_discrete <- function(colour_spec) {
+  vapply(vec_data(colour_spec), is_discrete, logical(1))
+}
+
+channel_is_void <- function(colour_spec) {
+  vapply(vec_data(colour_spec), is_void_channel, logical(1))
+}
+
 channels_discrete <- function(colour_spec, parallel = FALSE) {
-  discrete <- vapply(vec_data(colour_spec), is_discrete, logical(1))
+  discrete <- channel_is_discrete(colour_spec)
   void <- vapply(vec_data(colour_spec), is_void_channel, logical(1))
   if (parallel) {
     x <- as.list(vec_data(colour_spec))
@@ -49,7 +57,7 @@ channels_discrete <- function(colour_spec, parallel = FALSE) {
 }
 
 channels_continuous <- function(colour_spec, parellel = FALSE) {
-  continuous <- !vapply(vec_data(colour_spec), is_discrete, logical(1))
+  continuous <- !channel_is_discrete(colour_spec)
   void <- vapply(vec_data(colour_spec), is_void_channel, logical(1))
   if (parellel) {
     x <- as.list(vec_data(colour_spec))
