@@ -2,7 +2,7 @@
 
 #' Red-Green-Blue specification
 #'
-#' Creates a vector that stores values for red green and blue channels in the
+#' Creates a vector that stores values for red, green and blue channels in the
 #' RGB colour space.
 #'
 #' @param r,g,b Vectors with values for the red, green and blue channels
