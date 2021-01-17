@@ -10,7 +10,6 @@ scale_colour_rgb(
   ...,
   na.value = 0,
   guide = "none",
-  limits = NULL,
   aesthetics = c("colour", "red", "green", "blue")
 )
 
@@ -18,7 +17,6 @@ scale_fill_rgb(
   ...,
   na.value = 0,
   guide = "none",
-  limits = NULL,
   aesthetics = c("fill", "red", "green", "blue")
 )
 }
@@ -44,6 +42,19 @@ that channel. Channel names not in the \code{list}'s names defer to the
 \code{waiver()} option.
 }}
     \item{\code{labels}}{NOT IMPLEMENTED YET}
+    \item{\code{limits}}{One of \itemize{
+\item \code{NULL} to use the default scale range.
+\item A \code{colour_spec} vector. For continuous channels, must be a length 2
+vector giving the minimum and maximum. For discrete channels, the relevant
+channel should define possible values. For mixed usage, the continuous
+limits can be padded with \code{NA}s.
+\item A \code{function} that accepts the existing (automatic) limits and returns
+new limits. Note that this is used for both continuous and discrete
+channels.
+\item A named \code{list} with names of channels with (1) a vector defining
+the limits or (2) a function to be applied to the natural limits. Channel
+names not in the \code{list}'s names defer to the \code{NULL} option.
+}}
     \item{\code{prototype}}{A \code{function} that serves as constructor for the specific
 \code{colour_spec} class.}
     \item{\code{channel_limits}}{A \code{colour_spec} vector of length 2 indicating the
@@ -97,20 +108,6 @@ transformation with \code{\link[scales:trans_new]{scales::trans_new()}}.}
 \item{guide}{A function used to create a guide or its name. See
 \code{\link[ggplot2:guides]{guides()}} for more information.}
 
-\item{limits}{One of \itemize{
-\item \code{NULL} to use the default scale range.
-\item A \code{colour_spec} vector. For continuous channels, must be a length 2
-vector giving the minimum and maximum. For discrete channels, the relevant
-channel should define possible values. For mixed usage, the continuous
-limits can be padded with \code{NA}s.
-\item A \code{function} that accepts the existing (automatic) limits and returns
-new limits. Note that this is used for both continuous and discrete
-channels.
-\item A named \code{list} with names of channels with (1) a vector defining
-the limits or (2) a function to be applied to the natural limits. Channel
-names not in the \code{list}'s names defer to the \code{NULL} option.
-}}
-
 \item{aesthetics}{The names of the aesthetics that this scale works with.}
 }
 \value{
@@ -122,3 +119,10 @@ Maps the values of several variables to coordinates in the RGB colour space.
 \examples{
 NULL
 }
+\seealso{
+Other colour space scales: 
+\code{\link{scale_cmyk}},
+\code{\link{scale_hsl}},
+\code{\link{scale_hsv}}
+}
+\concept{colour space scales}

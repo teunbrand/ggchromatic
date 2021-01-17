@@ -8,6 +8,7 @@
 #' @return A `ScaleChromatic` ggproto object that can be added to a plot.
 #' @export
 #' @name scale_cmyk
+#' @family colour space scales
 #'
 #' @examples
 #' NULL
@@ -53,6 +54,7 @@ scale_fill_cmyk <- function(
 #' @return A `character` vector of the same length as `x` with hexadecimal
 #'   colour notation.
 #' @export
+#'
 #'
 #' @examples
 #' # By default, the limits are c(0, 1)

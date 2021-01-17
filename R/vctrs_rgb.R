@@ -10,6 +10,7 @@
 #'
 #' @return A `rgb_spec`, `vctrs_rcrd` S3 class object.
 #' @export
+#' @family colour space vectors
 #'
 #' @examples
 #' rgb_spec(c("A", "B", "C"), c(1, 2, 3), c(10, 9, 8))

@@ -16,7 +16,7 @@ A \code{character} vector of the same length as \code{x} with hexadecimal
 colour notation.
 }
 \description{
-This HSV palete converts a \code{hsv_spec} vector to colours
+This HSV palete converts a \code{hsv_spec} vector to colours.
 }
 \examples{
 # By default, the limits are c(0, 1)

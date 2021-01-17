@@ -10,6 +10,7 @@
 #'
 #' @return A `cmyk_spec`, `vctrs_rcrd` S3 class object.
 #' @export
+#' @family colour space vectors
 #'
 #' @examples
 #' cmyk_spec(c("A", "B", "C"), 1:3, 10:8, c("X","Y","Z"))

@@ -122,3 +122,10 @@ Maps the values of several variables to coordinates in the CMYK colour space.
 \examples{
 NULL
 }
+\seealso{
+Other colour space scales: 
+\code{\link{scale_hsl}},
+\code{\link{scale_hsv}},
+\code{\link{scale_rgb}}
+}
+\concept{colour space scales}

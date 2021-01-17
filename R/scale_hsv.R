@@ -8,6 +8,7 @@
 #' @return A `ScaleChromatic` ggproto object that can be added to a plot.
 #' @export
 #' @name scale_hsv
+#' @family colour space scales
 #'
 #' @examples
 #' NULL
@@ -41,7 +42,7 @@ scale_fill_hsv <- function(..., na.value = 0, guide = "none",
 
 #' HSV palette
 #'
-#' This HSV palete converts a `hsv_spec` vector to colours
+#' This HSV palete converts a `hsv_spec` vector to colours.
 #'
 #' @param x A `hsv_spec` vector
 #' @param min,max A `numeric(1)` specifying the upper and lower limits.

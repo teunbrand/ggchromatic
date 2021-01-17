@@ -8,14 +8,14 @@
 #' @return A `ScaleChromatic` ggproto object that can be added to a plot.
 #' @export
 #' @name scale_rgb
+#' @family colour space scales
 #'
 #' @examples
 #' NULL
 scale_colour_rgb <- function(..., na.value = 0, guide = "none",
-                             limits = NULL,
                              aesthetics = c("colour", "red", "green", "blue")) {
   scale <- chromatic_scale(
-    aesthetics, "colour_rgb", limits = limits,
+    aesthetics, "colour_rgb",
     rgb_palette, na.value = na.value, guide = guide, ...,
     prototype = rgb_spec,
     super = ScaleChromatic
@@ -26,10 +26,9 @@ scale_colour_rgb <- function(..., na.value = 0, guide = "none",
 #' @rdname scale_rgb
 #' @export
 scale_fill_rgb <- function(..., na.value = 0, guide = "none",
-                           limits = NULL,
                            aesthetics = c("fill", "red", "green", "blue")) {
   scale <- chromatic_scale(
-    aesthetics, "fill_rgb", limits = limits,
+    aesthetics, "fill_rgb",
     rgb_palette, na.value = na.value, guide = guide, ...,
     prototype = rgb_spec,
     super = ScaleChromatic

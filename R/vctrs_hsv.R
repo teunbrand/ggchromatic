@@ -1,3 +1,4 @@
+# Constructors ------------------------------------------------------------
 
 #' Hue-Saturation-Value specification
 #'
@@ -9,6 +10,7 @@
 #'
 #' @return A `hsv_spec`, `vctrs_rcrd` S3 class object.
 #' @export
+#' @family colour space vectors
 #'
 #' @examples
 #' hsv_spec(c("A", "B", "C"), c(1, 2, 3), c(10, 9, 8))

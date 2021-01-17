@@ -20,3 +20,10 @@ the HSV colour space.
 \examples{
 hsv_spec(c("A", "B", "C"), c(1, 2, 3), c(10, 9, 8))
 }
+\seealso{
+Other colour space vectors: 
+\code{\link{cmyk_spec}()},
+\code{\link{hsl_spec}()},
+\code{\link{rgb_spec}()}
+}
+\concept{colour space vectors}
