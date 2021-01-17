@@ -14,7 +14,7 @@ respectively.}
 A \code{rgb_spec}, \code{vctrs_rcrd} S3 class object.
 }
 \description{
-Creates a vector that stores values for red green and blue channels in the
+Creates a vector that stores values for red, green and blue channels in the
 RGB colour space.
 }
 \examples{
