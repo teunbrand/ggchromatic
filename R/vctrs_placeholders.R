@@ -1,0 +1,102 @@
+# Void channel ------------------------------------------------------------
+
+#' Void channel
+#'
+#' A `void_channel` vector is a placeholder vector takes the place of normal
+#' values in a `colour_spec` vector. This occurs automatically when a
+#' `colour_spec` is constructed with missing channels.
+#'
+#' @param x A vector with the appropriate size for the void channel.
+#'
+#' @return A `void_channel` vector
+#'
+#' @details Void channels do not participate in scale training, preserving
+#'   existing scale limits. While mapping a `colour_spec` vector to a vector of
+#'   hexadecimal colours, void channels take on the midpoint of the channel
+#'   limits.
+#'
+#' @noRd
+#' @keywords internal
+#' @examples
+#' void_channel(1)
+void_channel <- function(x = logical()) {
+  new_void_channel(size = vec_size(x))
+}
+
+new_void_channel <- function(size = 0) {
+  new_vctr(rep(NA, size), class = "void_channel")
+}
+
+is_void_channel <- function(x) {
+  inherits(x, "void_channel")
+}
+
+format.void_channel <- function(x, ...) {
+  return("")
+}
+
+# Void channel boilerplate ------------------------------------------------
+
+#' @export
+vec_ptype2.void_channel.void_channel <- function(x, y, ...) new_void_channel()
+
+#' @export
+vec_ptype2.void_channel.default <- function(x, y, ...) y
+
+#' @export
+vec_ptype2.void_channel.character <- function(x, y, ...) character()
+
+#' @export
+vec_ptype2.void_channel.logical <- function(x, y, ...) logical()
+
+#' @export
+#' @method vec_ptype2.character void_channel
+vec_ptype2.character.void_channel <- function(x, y, ...) character()
+
+#' @export
+#' @method vec_ptype2.logical void_channel
+vec_ptype2.logical.void_channel <- function(x, y, ...) logical()
+
+#' @export
+vec_cast.void_channel.void_channel <- function(x, to, ...) x
+
+#' @export
+vec_cast.void_channel.character <- function(x, to, ...) to
+
+#' @export
+#' @method vec_cast.character void_channel
+vec_cast.character.void_channel <- function(x, to, ...) as.character(vec_data(x))
+
+#' @export
+#' @method rescale void_channel
+rescale.void_channel <- function(x, to, from, ...) {
+  rep(mean(to), length(x))
+}
+
+# Expressions -------------------------------------------------------------
+
+new_vexpression <- function(x) {
+  if (!is.expression(x)) {
+    x <- as.expression(x)
+    if (!is.expression(x)) {
+      stop("Error in expression packaging.")
+    }
+  }
+  new_vctr(as.list(x), class = "vexpression")
+}
+
+as.expression.vexpression <- function(x) {
+  do.call(expression, vec_data(x))
+}
+
+is_alt_language <- function(x) {
+  is.language(x) || inherits(x, "vexpression")
+}
+
+unwrap_language <- function(x) {
+  if (inherits(x, "vexpression")) {
+    as.expression(x)
+  } else {
+    do.call(expression, x)
+  }
+}

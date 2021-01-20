@@ -34,6 +34,12 @@ pad_nas.list <- function(x, size = max(lengths(x))) {
   lapply(x, pad_nas, size = size)
 }
 
+#' @method pad_nas vexpression
+#' @export
+pad_nas.vexpression <- function(x, size = max(length(x))) {
+  vec_c(x, new_vexpression(rep(NA, size - length(x))))
+}
+
 #' Remove the NAs
 #'
 #' This is a simple helper for some of the internals.
@@ -61,9 +67,21 @@ without_nas.list <- function(x) {
   lapply(x, without_nas)
 }
 
+#' @export
+#' @method without_nas vexpression
+without_nas.vexpression <- function(x) {
+  x[!is.na(as.list(vec_data(x)))]
+}
+
 # Lapply over nonzero length elements
 lapply_nz <- function(X, FUN, ...) {
   X[lengths(X) > 0] <- lapply(X[lengths(X) > 0], FUN, ...)
+  return(X)
+}
+
+# Conditional lapply
+clapply <- function(X, test, FUN, ...) {
+  X[test] <- lapply(X[test], FUN, ...)
   return(X)
 }
 
