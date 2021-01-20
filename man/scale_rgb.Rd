@@ -38,10 +38,25 @@ that this is used for both continuous and discrete channels.
 \item A named \code{list} with the names of channels with (1) a \code{character}
 or \code{numeric} vector giving the breaks for that channel or (2) a function to
 be applied to the limits of that channel or (3) \code{NULL} for no breaks in
-that channel. Channel names not in the \code{list}'s names defer to the
-\code{waiver()} option.
+that channel. Channels whose names are absent in the \code{list}'s names are
+treated with the \code{waiver()} option above.
 }}
-    \item{\code{labels}}{NOT IMPLEMENTED YET}
+    \item{\code{labels}}{One of \itemize{
+\item \code{NULL} for no labels.
+\item \code{waiver()} for the default labels. In case of continuous channels,
+these are passed through the format function of the
+\href{scales::trans_new()}{transformation object}.
+\item A \code{colour_spec} vector with character vectors in the channels. The
+channels can be padded with \code{NA}s to match the length of channels with the
+most breaks.
+\item A \code{function} that uses the breaks as input and returns labels. Note
+that this is used for both continuous and discrete channels.
+\item A named \code{list} with the names of channels with (1) a \code{character}
+vector giving the labels for that channel or (2) a function to be applied to
+the breaks of that channel or (3) \code{NULL} for no labels in that channel.
+Channels whose names are absent in the \code{list}'s names are treated with the
+\code{waiver()} option above.
+}}
     \item{\code{limits}}{One of \itemize{
 \item \code{NULL} to use the default scale range.
 \item A \code{colour_spec} vector. For continuous channels, must be a length 2
@@ -52,13 +67,18 @@ limits can be padded with \code{NA}s.
 new limits. Note that this is used for both continuous and discrete
 channels.
 \item A named \code{list} with names of channels with (1) a vector defining
-the limits or (2) a function to be applied to the natural limits. Channel
-names not in the \code{list}'s names defer to the \code{NULL} option.
+the limits or (2) a function to be applied to the natural limits. Channels
+whose names are absent in the \code{list}'s names are treated with the \code{NULL}
+option above.
 }}
     \item{\code{prototype}}{A \code{function} that serves as constructor for the specific
 \code{colour_spec} class.}
-    \item{\code{channel_limits}}{A \code{colour_spec} vector of length 2 indicating the
-limits for each channel.}
+    \item{\code{channel_limits}}{One of: \itemize{
+\item A \code{colour_spec} vector of length 2 containing \code{numeric} channels that
+indicating the limits for each channel between 0-1.
+\item A named \code{list} with channel names and length 1 or 2 \code{numeric} vectors
+that indicate the limits for that channel between 0-1.
+}}
     \item{\code{scale_name}}{The name of the scale that should be used for error messages
 associated with this scale.}
     \item{\code{name}}{The name of the scale. Used as the axis or legend title. If

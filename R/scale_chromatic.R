@@ -20,10 +20,25 @@
 #'   \item A named `list` with the names of channels with (1) a `character`
 #'   or `numeric` vector giving the breaks for that channel or (2) a function to
 #'   be applied to the limits of that channel or (3) `NULL` for no breaks in
-#'   that channel. Channel names not in the `list`'s names defer to the
-#'   `waiver()` option.
+#'   that channel. Channels whose names are absent in the `list`'s names are
+#'   treated with the `waiver()` option above.
 #' }
-#' @param labels NOT IMPLEMENTED YET
+#' @param labels One of \itemize{
+#'  \item `NULL` for no labels.
+#'  \item `waiver()` for the default labels. In case of continuous channels,
+#'  these are passed through the format function of the
+#'  [transformation object](scales::trans_new()).
+#'  \item A `colour_spec` vector with character vectors in the channels. The
+#'  channels can be padded with `NA`s to match the length of channels with the
+#'  most breaks.
+#'  \item A `function` that uses the breaks as input and returns labels. Note
+#'  that this is used for both continuous and discrete channels.
+#'  \item A named `list` with the names of channels with (1) a `character`
+#'  vector giving the labels for that channel or (2) a function to be applied to
+#'  the breaks of that channel or (3) `NULL` for no labels in that channel.
+#'  Channels whose names are absent in the `list`'s names are treated with the
+#'  `waiver()` option above.
+#' }
 #' @param limits One of \itemize{
 #'  \item `NULL` to use the default scale range.
 #'  \item A `colour_spec` vector. For continuous channels, must be a length 2
@@ -34,14 +49,18 @@
 #'  new limits. Note that this is used for both continuous and discrete
 #'  channels.
 #'  \item A named `list` with names of channels with (1) a vector defining
-#'  the limits or (2) a function to be applied to the natural limits. Channel
-#'  names not in the `list`'s names defer to the `NULL` option.
+#'  the limits or (2) a function to be applied to the natural limits. Channels
+#'  whose names are absent in the `list`'s names are treated with the `NULL`
+#'  option above.
 #' }
 #' @param prototype A `function` that serves as constructor for the specific
 #'   `colour_spec` class.
-#' @param channel_limits A `colour_spec` vector of length 2 indicating the
-#'   limits for each channel.
-#'
+#' @param channel_limits One of: \itemize{
+#'  \item A `colour_spec` vector of length 2 containing `numeric` channels that
+#'  indicating the limits for each channel between 0-1.
+#'  \item A named `list` with channel names and length 1 or 2 `numeric` vectors
+#'  that indicate the limits for that channel between 0-1.
+#'  }
 #' @return A `ScaleChromatic` ggproto object.
 #' @export
 #'
@@ -59,7 +78,7 @@ chromatic_scale <- function(
   rescaler = rescale,
   oob = oob_censor,
   expand = waiver(),
-  na.value = NA,
+  na.value = "grey50",
   trans = "identity",
   guide = "legend",
   prototype = NULL,
@@ -296,7 +315,7 @@ ScaleChromatic <- ggproto(
     zerorange <- setNames(rep(FALSE, length(breaks)), names(breaks))
     zerorange[!disc & calc] <- vapply(breaks[!disc & calc],
                                       zero_range, logical(1))
-    breaks[zerorange] <- lapply(breaks[zerorange], `[[`, 1)
+    breaks <- clapply(breaks, zerorange, `[[`, 1)
     calc[zerorange | disc] <- FALSE
 
     if (inherits(self$breaks, "waiver")) {
@@ -304,7 +323,7 @@ ScaleChromatic <- ggproto(
       breaks[calc] <- breaks_from_trans(breaks[calc], self$trans,
                                         self$n.breaks)
     } else if (is.function(self$breaks)) {
-      breaks[!zerorange] <- lapply(breaks[!zerorange], self$breaks)
+      breaks <- clapply(breaks, !zerorange, self$breaks)
     } else if (is.list(self$breaks)) {
       # rlang::abort("List breaks not implemented yet")
       fields <- names(breaks)
@@ -333,7 +352,7 @@ ScaleChromatic <- ggproto(
       breaks <- without_nas(as.list(vec_data(self$breaks)))
     }
 
-    breaks[!disc] <- lapply(breaks[!disc], self$trans$transform)
+    breaks <- clapply(breaks, !disc, self$trans$transform)
 
     breaks <- do.call(self$ptype, pad_nas(breaks))
 
@@ -343,11 +362,80 @@ ScaleChromatic <- ggproto(
 
   },
 
+  get_labels = function(self, breaks = self$get_breaks()) {
+
+    if (is.null(breaks)) {
+      return(NULL)
+    }
+    if (is.null(self$labels)) {
+      return(NULL)
+    }
+    if (identical(self$labels, NA)) {
+      rlang::abort("Invalid labels specification. Use NULL not NA.")
+    }
+
+    labels <- channels_apply_c(breaks, self$trans$inverse)
+    labels <- without_nas(as.list(vec_data(labels)))
+    labels <- labels[lengths(labels) > 0] # Remove void channels (all NAs)
+    disc <- vapply(labels, is_discrete, logical(1))
+
+    if (inherits(self$labels, "waiver")) {
+      labels <- clapply(labels,  disc, as.character)
+      labels <- clapply(labels, !disc, self$trans$format)
+    } else if (is.function(self$labels)) {
+      labels <- lapply(labels, self$labels)
+    } else if (is.list(self$labels) && is_named(self$labels)) {
+      fields <- names(labels)
+      is_defined <- fields %in% names(self$labels)
+      labels <- clapply(labels,  disc & !is_defined, as.character)
+      labels <- clapply(labels, !disc & !is_defined, self$trans$format)
+      defined <- self$labels[names(self$labels) %in% fields[is_defined]]
+      labels[is_defined] <- lapply(
+        setNames(nm = fields[is_defined]), function(f) {
+          lbl <- defined[[f]]
+          if (is.null(lbl)) {
+            return(new_void_channel(1))
+          } else if (is.function(lbl)) {
+            lbl(labels[[f]])
+          } else {
+            lbl
+          }
+        })
+    } else {
+      labels <- without_nas(as.list(vec_data(self$labels)))
+    }
+
+    # Flatten list labels
+    list_lab <- vapply(labels, is.list, logical(1))
+    labels <- clapply(labels, list_lab, function(lab) {
+      lab[vapply(lab, length, integer(1)) == 0] <- ""
+      lab <- lapply(lab, `[`, 1)
+      unlist(lab)
+    })
+    lang_lab <- vapply(labels, is.language, logical(1))
+    labels <- clapply(labels, lang_lab, function(lab) {
+      new_vexpression(lab)
+    })
+
+    labels <- do.call(self$ptype, pad_nas(labels))
+
+    if (length(labels) != length(breaks)) {
+      rlang::abort("Breaks and labels are different lengths.")
+    }
+
+    labels
+
+  },
+
   print = function(self, ...) {
 
     show_range <- function(x) {
       if (is_discrete(x)) {
-        do.call(paste, as.list(x))
+        if (is_void_channel(x)) {
+          "Absent"
+        } else {
+          do.call(paste, as.list(x))
+        }
       } else {
         paste0(formatC(without_nas(x), digits = 3), collapse = " -- ")
       }
