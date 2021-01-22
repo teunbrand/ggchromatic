@@ -358,6 +358,10 @@ ScaleChromatic <- ggproto(
 
     breaks <- self$apply_oob(breaks, limits, oob = oob_censor)
 
+    breaks <- as.list(vec_data(breaks))
+    breaks <- without_nas(breaks)
+    breaks <- do.call(self$ptype, pad_nas(breaks))
+
     breaks
 
   },
@@ -425,6 +429,22 @@ ScaleChromatic <- ggproto(
 
     labels
 
+  },
+
+  make_title = function(title, sub = substitute(title)) {
+    sub <- call_args(sub)
+    global <- eval(sub[[2]], envir = parent.frame(2))
+    sub <- call_args(sub[[1]])
+    scale <- eval(sub[[2]], envir = parent.frame(2))
+    guide <- eval(sub[[1]], envir = parent.frame(2))
+    if (!inherits(guide, "waiver")) {
+      return(guide)
+    }
+    if (!inherits(scale, "waiver")) {
+      return(scale)
+    }
+    title <- decompose_title(global)
+    return(title)
   },
 
   print = function(self, ...) {
@@ -519,4 +539,18 @@ check_channel_limits <- function(x, ptype) {
   }
   x <- lapply(x, oob_squish)
   vec_restore(x, ptype())
+}
+
+decompose_title <- function(title, sep = NULL) {
+  lang <- str2lang(title)
+  if (is_call(lang)) {
+    args <- unname(call_args(lang))
+    args <- vapply(args, as_string, character(1))
+    return(args)
+  }
+  if (!is.null(sep)) {
+    title <- strsplit(title, sep)[[1]]
+    return(title)
+  }
+  title
 }
