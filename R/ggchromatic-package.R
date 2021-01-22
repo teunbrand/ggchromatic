@@ -3,6 +3,8 @@
 #' @import rlang
 #' @import ggplot2
 #' @import vctrs
+#' @import grid
+#' @import gtable
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage
