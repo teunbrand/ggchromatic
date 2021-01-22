@@ -14,14 +14,13 @@
 #' @examples
 #' NULL
 scale_colour_hsl <- function(
-  ..., na.value = 0, guide = "none",
+  ..., na.value = "grey50",
   aesthetics = c("colour", "hue", "saturation", "lightness")
 ) {
   scale <- chromatic_scale(
     aesthetics, "colour_hsl",
-    hsl_palette, na.value = na.value, guide = guide, ...,
-    prototype = hsl_spec,
-    super = ScaleChromatic
+    hsl_palette, na.value = na.value, ...,
+    prototype = hsl_spec
   )
   scale
 }
@@ -29,14 +28,13 @@ scale_colour_hsl <- function(
 #' @rdname scale_hsl
 #' @export
 scale_fill_hsl <- function(
-  ..., na.value = 0, guide = "none",
+  ..., na.value = "grey50",
   aesthetics = c("fill", "hue", "saturation", "lightness")
 ) {
   scale <- chromatic_scale(
     aesthetics, "fill_hsl",
-    hsl_palette, na.value = na.value, guide = guide, ...,
-    prototype = hsl_spec,
-    super = ScaleChromatic
+    hsl_palette, na.value = na.value, ...,
+    prototype = hsl_spec
   )
   scale
 }

@@ -8,17 +8,13 @@
 \usage{
 scale_colour_hsv(
   ...,
-  na.value = 0,
-  guide = "none",
-  limits = NULL,
+  na.value = "grey50",
   aesthetics = c("colour", "hue", "saturation", "value")
 )
 
 scale_fill_hsv(
   ...,
-  na.value = 0,
-  guide = "none",
-  limits = NULL,
+  na.value = "grey50",
   aesthetics = c("fill", "hue", "saturation", "value")
 )
 }
@@ -58,6 +54,20 @@ vector giving the labels for that channel or (2) a function to be applied to
 the breaks of that channel or (3) \code{NULL} for no labels in that channel.
 Channels whose names are absent in the \code{list}'s names are treated with the
 \code{waiver()} option above.
+}}
+    \item{\code{limits}}{One of \itemize{
+\item \code{NULL} to use the default scale range.
+\item A \code{colour_spec} vector. For continuous channels, must be a length 2
+vector giving the minimum and maximum. For discrete channels, the relevant
+channel should define possible values. For mixed usage, the continuous
+limits can be padded with \code{NA}s.
+\item A \code{function} that accepts the existing (automatic) limits and returns
+new limits. Note that this is used for both continuous and discrete
+channels.
+\item A named \code{list} with names of channels with (1) a vector defining
+the limits or (2) a function to be applied to the natural limits. Channels
+whose names are absent in the \code{list}'s names are treated with the \code{NULL}
+option above.
 }}
     \item{\code{prototype}}{A \code{function} that serves as constructor for the specific
 \code{colour_spec} class.}
@@ -108,28 +118,12 @@ and methods for generating breaks and labels. Transformation objects
 are defined in the scales package, and are called \verb{<name>_trans} (e.g.,
 \code{\link[scales:boxcox_trans]{scales::boxcox_trans()}}). You can create your own
 transformation with \code{\link[scales:trans_new]{scales::trans_new()}}.}
+    \item{\code{guide}}{A function used to create a guide or its name. See
+\code{\link[ggplot2:guides]{guides()}} for more information.}
     \item{\code{super}}{The super class to use for the constructed scale}
   }}
 
 \item{na.value}{Missing values will be replaced with this value.}
-
-\item{guide}{A function used to create a guide or its name. See
-\code{\link[ggplot2:guides]{guides()}} for more information.}
-
-\item{limits}{One of \itemize{
-\item \code{NULL} to use the default scale range.
-\item A \code{colour_spec} vector. For continuous channels, must be a length 2
-vector giving the minimum and maximum. For discrete channels, the relevant
-channel should define possible values. For mixed usage, the continuous
-limits can be padded with \code{NA}s.
-\item A \code{function} that accepts the existing (automatic) limits and returns
-new limits. Note that this is used for both continuous and discrete
-channels.
-\item A named \code{list} with names of channels with (1) a vector defining
-the limits or (2) a function to be applied to the natural limits. Channels
-whose names are absent in the \code{list}'s names are treated with the \code{NULL}
-option above.
-}}
 
 \item{aesthetics}{The names of the aesthetics that this scale works with.}
 }

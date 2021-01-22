@@ -13,15 +13,13 @@
 #' @examples
 #' NULL
 scale_colour_cmyk <- function(
-  ..., na.value = 0, guide = "none",
-  limits = NULL,
+  ..., na.value = "grey50",
   aesthetics = c("colour", "cyan", "magenta", "yellow", "key"))
 {
   scale <- chromatic_scale(
-    aesthetics, "colour_cmyk", limits = limits,
-    cmyk_palette, na.value = na.value, guide = guide, ...,
-    prototype = cmyk_spec,
-    super = ScaleChromatic
+    aesthetics, "colour_cmyk",
+    cmyk_palette, na.value = na.value, ...,
+    prototype = cmyk_spec
   )
   scale
 }
@@ -29,15 +27,13 @@ scale_colour_cmyk <- function(
 #' @export
 #' @rdname scale_cmyk
 scale_fill_cmyk <- function(
-  ..., na.value = 0, guide = "none",
-  limits = NULL,
+  ..., na.value = "grey50",
   aesthetics = c("fill", "cyan", "magenta", "yellow", "key")
 ) {
   scale <- chromatic_scale(
-    aesthetics, "fill_cmyk", limits = limits,
-    cmyk_palette, na.value = na.value, guide = guide, ...,
-    prototype = cmyk_spec,
-    super = ScaleChromatic
+    aesthetics, "fill_cmyk",
+    cmyk_palette, na.value = na.value, ...,
+    prototype = cmyk_spec
   )
   scale
 }

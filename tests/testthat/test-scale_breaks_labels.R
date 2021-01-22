@@ -11,7 +11,7 @@ test_that("scale breaks can be calculated", {
   expect_equal(sc$get_breaks(),
                rgb_spec(seq(0, 10, by = 2.5),
                         c("A", "B", "C", NA, NA),
-                        new_void_channel(5)))
+                        c(NA, NA, NA, NA, NA)))
 })
 
 test_that("scale_breaks can be a function", {
@@ -26,7 +26,7 @@ test_that("scale_breaks can be a function", {
   expect_equal(sc$get_breaks(),
                rgb_spec(c(0, 5, 10),
                         c("C", "B", "A"),
-                        new_void_channel(3)))
+                        c(NA, NA, NA)))
 })
 
 test_that("scale_breaks can be NULL", {
@@ -49,7 +49,7 @@ test_that("scale_breaks can be a list", {
 
   expect_equal(
     sc$get_breaks(),
-    rgb_spec(c(0, 5, 10), c("B", "C", "A"))
+    rgb_spec(c(0, 5, 10), c("B", "C", "A"), c(NA, NA, NA))
   )
 
 })

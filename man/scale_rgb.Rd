@@ -8,15 +8,13 @@
 \usage{
 scale_colour_rgb(
   ...,
-  na.value = 0,
-  guide = "none",
+  na.value = "grey50",
   aesthetics = c("colour", "red", "green", "blue")
 )
 
 scale_fill_rgb(
   ...,
-  na.value = 0,
-  guide = "none",
+  na.value = "grey50",
   aesthetics = c("fill", "red", "green", "blue")
 )
 }
@@ -120,13 +118,12 @@ and methods for generating breaks and labels. Transformation objects
 are defined in the scales package, and are called \verb{<name>_trans} (e.g.,
 \code{\link[scales:boxcox_trans]{scales::boxcox_trans()}}). You can create your own
 transformation with \code{\link[scales:trans_new]{scales::trans_new()}}.}
+    \item{\code{guide}}{A function used to create a guide or its name. See
+\code{\link[ggplot2:guides]{guides()}} for more information.}
     \item{\code{super}}{The super class to use for the constructed scale}
   }}
 
 \item{na.value}{Missing values will be replaced with this value.}
-
-\item{guide}{A function used to create a guide or its name. See
-\code{\link[ggplot2:guides]{guides()}} for more information.}
 
 \item{aesthetics}{The names of the aesthetics that this scale works with.}
 }

@@ -12,28 +12,24 @@
 #'
 #' @examples
 #' NULL
-scale_colour_hsv <- function(..., na.value = 0, guide = "none",
-                             limits = NULL,
+scale_colour_hsv <- function(..., na.value = "grey50",
                              aesthetics = c("colour", "hue", "saturation", "value")) {
   scale <- chromatic_scale(
-    aesthetics, "colour_hsv", limits = limits,
-    hsv_palette, na.value = na.value, guide = guide, ...,
-    prototype = hsv_spec,
-    super = ScaleChromatic
+    aesthetics, "colour_hsv",
+    hsv_palette, na.value = na.value, ...,
+    prototype = hsv_spec
   )
   scale
 }
 
 #' @export
 #' @rdname scale_hsv
-scale_fill_hsv <- function(..., na.value = 0, guide = "none",
-                             limits = NULL,
+scale_fill_hsv <- function(..., na.value = "grey50",
                              aesthetics = c("fill", "hue", "saturation", "value")) {
   scale <- chromatic_scale(
-    aesthetics, "colour_hsv", limits = limits,
-    hsv_palette, na.value = na.value, guide = guide, ...,
-    prototype = hsv_spec,
-    super = ScaleChromatic
+    aesthetics, "colour_hsv",
+    hsv_palette, na.value = na.value, ...,
+    prototype = hsv_spec
   )
   scale
 }

@@ -80,7 +80,7 @@ chromatic_scale <- function(
   expand = waiver(),
   na.value = "grey50",
   trans = "identity",
-  guide = "legend",
+  guide = "colourcube",
   prototype = NULL,
   channel_limits = NULL,
   super = ScaleChromatic
@@ -542,7 +542,10 @@ check_channel_limits <- function(x, ptype) {
 }
 
 decompose_title <- function(title, sep = NULL) {
-  lang <- str2lang(title)
+  if (is.null(title)) {
+    return(NULL)
+  }
+  lang <- str2lang(as_string(title))
   if (is_call(lang)) {
     args <- unname(call_args(lang))
     args <- vapply(args, as_string, character(1))

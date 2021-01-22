@@ -12,26 +12,24 @@
 #'
 #' @examples
 #' NULL
-scale_colour_rgb <- function(..., na.value = 0, guide = "none",
+scale_colour_rgb <- function(..., na.value = "grey50",
                              aesthetics = c("colour", "red", "green", "blue")) {
   scale <- chromatic_scale(
     aesthetics, "colour_rgb",
-    rgb_palette, na.value = na.value, guide = guide, ...,
-    prototype = rgb_spec,
-    super = ScaleChromatic
+    rgb_palette, na.value = na.value, ...,
+    prototype = rgb_spec
   )
   scale
 }
 
 #' @rdname scale_rgb
 #' @export
-scale_fill_rgb <- function(..., na.value = 0, guide = "none",
+scale_fill_rgb <- function(..., na.value = "grey50",
                            aesthetics = c("fill", "red", "green", "blue")) {
   scale <- chromatic_scale(
     aesthetics, "fill_rgb",
-    rgb_palette, na.value = na.value, guide = guide, ...,
-    prototype = rgb_spec,
-    super = ScaleChromatic
+    rgb_palette, na.value = na.value, ...,
+    prototype = rgb_spec
   )
   scale
 }

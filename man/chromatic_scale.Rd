@@ -18,7 +18,7 @@ chromatic_scale(
   expand = waiver(),
   na.value = "grey50",
   trans = "identity",
-  guide = "legend",
+  guide = "colourcube",
   prototype = NULL,
   channel_limits = NULL,
   super = ScaleChromatic
