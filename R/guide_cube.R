@@ -7,10 +7,12 @@
 #' isometric cube displaying the colours.
 #'
 #' @inheritParams ggplot2::guide_colorbar
-#' @title A character string or expression indicating the title of guide. If
+#' @param title A character string or expression indicating the title of guide. If
 #'   `NULL`, the title is not shown. By default (`waiver()`), the name of the
 #'   scale object or the name specified in `labs()` is used for the title. Note
 #'   that the colour cube guide can take 3 titles: one for each axis.
+#' @param title.offset A `numeric(1)` in centimeters determining how far away
+#'   the axis titles should be drawn relative to the rightmost labels.
 #' @param cubewidth,cubeheight A `numeric(1)` or `grid::unit()` object
 #'   specifying the width/height of the colourcube. Default value is the
 #'   `legend.key.width/height` or `legend.key.size` in the theme. The colour
@@ -29,6 +31,7 @@ guide_colourcube <- function(
   title.theme = NULL,
   title.hjust = NULL,
   title.vjust = NULL,
+  title.offset = 0.2,
 
   # Label
   label = TRUE,
@@ -63,6 +66,9 @@ guide_colourcube <- function(
   if (!is.null(cubeheight) && !is.unit(cubeheight)) {
     cubeheight <- unit(cubeheight, default.unit)
   }
+  if (!is.null(title.offset) && is.unit(title.offset)) {
+    title.offset <- convertUnit(title.offset, "cm", valueOnly = TRUE)
+  }
 
   structure(list(
     # Title
@@ -71,6 +77,7 @@ guide_colourcube <- function(
     title.theme = title.theme,
     title.hjust = title.hjust,
     title.vjust = title.vjust,
+    title.offset = title.offset,
 
     # Label
     label = label,
@@ -231,7 +238,7 @@ guide_gengrob.colourcube <- function(guide, theme) {
                          "cm", valueOnly = TRUE)
 
   widths  <- c(padding[4], widths,  padding[2])
-  heights <- c(padding[1], heights, abs(min_y), padding[3])
+  heights <- c(padding[1], heights, padding[3])
 
 
   gt <- gtable(widths = unit(widths, "cm"), heights = unit(heights, "cm"))
@@ -419,7 +426,7 @@ build_cube_axes <- function(guide, theme, params) {
       label.theme,
       label = lab, x = unit(x, "cm"), y = unit(y, "cm"),
       hjust = hjust, vjust = vjust,
-      check.overlap = guide$check.overlap
+      check.overlap = guide$check.overlap,
     ))
   } else {
     label_grob <- NULL
@@ -466,7 +473,7 @@ build_cube_titles <- function(guide, theme, params) {
   title.theme <- guide$title.theme %||% calc_element("legend.title", theme)
 
   if (length(guide$title) > 1) {
-    rel <- (params$max_x + 0.2) / params$size$width
+    rel <- (params$max_x + guide$title.offset) / params$size$width
 
     pos <- project_isometric(
       x = ifelse(c(0, 1, 1, 1, 1, 1) == 0, 1 - rel, rel),
@@ -640,19 +647,18 @@ measure_titlegrob <- function(grob, params, unit = "cm") {
   if (is.null(grob) || inherits(grob, "zeroGrob")) {
     return(params)
   }
-  x <- convertUnit(grobX(grob$children[[1]], "north"), unit, valueOnly = TRUE)
-  y <- convertUnit(grobY(grob$children[[1]], "east"),  unit, valueOnly = TRUE)
+  measure <- measure_labels(grob)
 
-  width <- convertUnit(grobWidth(grob), unit, valueOnly = TRUE)
-  height <- convertUnit(grobHeight(grob), unit, valueOnly = TRUE)
+  x <- mean(range(measure$x, na.rm = TRUE))
+  y <- mean(range(measure$y, na.rm = TRUE))
 
-  x_range <- x + c(-0.5, 0.5) * width
-  y_range <- y + c(-0.5, 0.5) * height
+  w <- convertWidth(grobWidth(grob), "cm", valueOnly = TRUE)
+  h <- convertHeight(grobHeight(grob), "cm", valueOnly = TRUE)
 
-  params$min_x <- min(x_range, params$min_x %||% 0)
-  params$max_x <- max(x_range, params$max_x %||% 0)
-  params$min_y <- min(y_range, params$min_y %||% 0)
-  params$max_y <- max(y_range, params$max_y %||% 0)
+  params$min_x <- min(x - 0.5 * w, params$min_x %||% 0)
+  params$max_x <- max(x + 0.5 * w, params$max_x %||% 0)
+  params$min_y <- min(y - 0.5 * h, params$min_y %||% 0)
+  params$max_y <- max(y + 0.5 * h, params$max_y %||% 0)
 
   return(params)
 }
@@ -670,4 +676,38 @@ measure_polygongrob <- function(grob, params, unit = "cm") {
   params$max_y <- max(y, params$max_y %||% 0)
 
   return(params)
+}
+
+measure_labels <- function(grob, unit = "cm") {
+  if (is.null(grob) || inherits(grob, "zeroGrob") || !is.grob(grob)) {
+    return(list(x = NA, y = NA))
+  }
+  if ("children" %in% names(grob)) {
+    if (all(c("xext", "yext") %in% names(grob))) {
+
+      x <- convertUnit(grob$x + unit(range(grob$xext), "pt"),
+                       "cm", valueOnly = TRUE)
+      y <- convertUnit(grob$y + unit(range(grob$yext), "pt"),
+                       "cm", valueOnly = TRUE)
+    } else {
+      # Recursion through the children
+      children <- lapply(unname(grob$children), measure_labels)
+      x <- unlist(lapply(children, `[[`, "x"), recursive = TRUE)
+      y <- unlist(lapply(children, `[[`, "y"), recursive = TRUE)
+    }
+    x <- range(x, na.rm = TRUE)
+    y <- range(y, na.rm = TRUE)
+    return(list(x = x, y = y))
+  }
+  if (inherits(grob, "text")) {
+    x <- convertX(grob$x, "cm", valueOnly = TRUE)
+    y <- convertY(grob$y, "cm", valueOnly = TRUE)
+    w <- convertWidth(stringWidth(grob$label), "cm", valueOnly = TRUE)
+    h <- convertHeight(stringWidth(grob$label), "cm", valueOnly = TRUE)
+    x <- range(c(x + 0.5 * w, x - 0.5 * w), na.rm = TRUE)
+    y <- range(c(y + 0.5 * h, y - 0.5 * h), na.rm = TRUE)
+    return(list(x = x, y = y))
+  } else {
+    return(list(x = NA, y = NA))
+  }
 }

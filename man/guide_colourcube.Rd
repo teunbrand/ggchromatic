@@ -2,10 +2,7 @@
 % Please edit documentation in R/guide_cube.R
 \name{guide_colourcube}
 \alias{guide_colourcube}
-\title{A character string or expression indicating the title of guide. If
-\code{NULL}, the title is not shown. By default (\code{waiver()}), the name of the
-scale object or the name specified in \code{labs()} is used for the title. Note
-that the colour cube guide can take 3 titles: one for each axis.}
+\title{Chromatic colour cube guide}
 \usage{
 guide_colourcube(
   title = waiver(),
@@ -13,6 +10,7 @@ guide_colourcube(
   title.theme = NULL,
   title.hjust = NULL,
   title.vjust = NULL,
+  title.offset = 0.2,
   label = TRUE,
   label.theme = NULL,
   label.hjust = NULL,
@@ -34,10 +32,10 @@ guide_colourcube(
 )
 }
 \arguments{
-\item{title}{A character string or expression indicating a title of guide.
-If \code{NULL}, the title is not shown. By default
-(\code{\link[ggplot2:waiver]{waiver()}}), the name of the scale object or the name
-specified in \code{\link[ggplot2:labs]{labs()}} is used for the title.}
+\item{title}{A character string or expression indicating the title of guide. If
+\code{NULL}, the title is not shown. By default (\code{waiver()}), the name of the
+scale object or the name specified in \code{labs()} is used for the title. Note
+that the colour cube guide can take 3 titles: one for each axis.}
 
 \item{title.position}{A character string indicating the position of a
 title. One of "top" (default for a vertical guide), "bottom", "left"
@@ -52,6 +50,9 @@ title text.}
 
 \item{title.vjust}{A number specifying vertical justification of the title
 text.}
+
+\item{title.offset}{A \code{numeric(1)} in centimeters determining how far away
+the axis titles should be drawn relative to the rightmost labels.}
 
 \item{label}{logical. If \code{TRUE} then the labels are drawn. If
 \code{FALSE} then the labels are invisible.}
@@ -109,9 +110,6 @@ for which a colourbar can be drawn.}
 A \code{guide_colourcube} S3 object.
 }
 \description{
-Chromatic colour cube guide
-}
-\details{
 The colour cube guide is a specialised guide for chromatic scales. It maps
 three channels of a chromatic scale along three dimensions and renders an
 isometric cube displaying the colours.
