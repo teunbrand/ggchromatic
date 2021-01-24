@@ -17,7 +17,9 @@
 #'   specifying the width/height of the colourcube. Default value is the
 #'   `legend.key.width/height` or `legend.key.size` in the theme. The colour
 #'   cube guide takes the lesser of the width/height for the size.
-#' @param rotate NOT IMPLEMENTED YET.
+#' @param rotate A `integer` vector equal in length to the number of channels.
+#'   Changes the order in which channels are displayed in the cube. For example,
+#'   `c(1, 3, 2)` swaps the placement of the 2nd and 3rd channels.
 #'
 #' @return A `guide_colourcube` S3 object.
 #' @export
@@ -90,6 +92,7 @@ guide_colourcube <- function(
     cubewidth = cubewidth,
     cubeheight = cubeheight,
     nbin = nbin,
+    rotate = rotate,
 
     # Frame
     frame.colour = frame.colour,
@@ -127,11 +130,13 @@ guide_train.colourcube <- function(guide, scale, aesthetic = NULL) {
   }
 
   aes <- aesthetic %||% scale$aesthetic[[1]]
+  rot <- guide$rotate[1:3]
 
   guide$key <- guide_key_from_chromatic(scale, aes)
+  guide$key$.channel <- rot[guide$key$.channel]
 
   # Drop any channels beyond 3. I cannot make 4D hypercubes.
-  limits <- vec_data(scale$get_limits())[1:3]
+  limits <- vec_data(scale$get_limits())[rot]
   disc   <- vapply(limits, is_discrete, logical(1))
   void   <- vapply(limits, function(x) all(is.na(x)), logical(1))
   limits <- without_nas(lapply(limits, unique))
@@ -388,7 +393,7 @@ build_cube_axes <- function(guide, theme, params) {
   key <- guide$key
   nr <- nrow(key)
   values <- split(key$.value, key$.channel)
-  labels <- split(key$.label, key$.channel)
+  .labels <- split(key$.label, key$.channel)
 
   ticklength <- 0.05
 
@@ -419,7 +424,7 @@ build_cube_axes <- function(guide, theme, params) {
       y = rescale(y, from = params$range$y, to = c(0, params$size$height)),
       hjust = rep(c(0, 0, 0.5), lens),
       vjust = rep(c(0.5, 0.5, 0), lens),
-      lab = key$.label
+      lab = unlist(.labels)
     )
     label.theme <- guide$label.theme %||% calc_element("legend.text", theme)
     label_grob <- with(labels, element_grob(
@@ -473,6 +478,9 @@ build_cube_titles <- function(guide, theme, params) {
   title.theme <- guide$title.theme %||% calc_element("legend.title", theme)
 
   if (length(guide$title) > 1) {
+    label <- c(guide$title, rep("", 3 - length(guide$title)))
+    label <- label[guide$rotate[1:3]]
+
     rel <- (params$max_x + guide$title.offset) / params$size$width
 
     pos <- project_isometric(
@@ -496,7 +504,7 @@ build_cube_titles <- function(guide, theme, params) {
     # usage
     grob <- suppressWarnings(element_grob(
       title.theme,
-      label = guide$title,
+      label = label,
       angle = ang,
       x = unit(pos[, 1], "cm"), y = unit(pos[, 2], "cm"),
       hjust = 0.5, vjust = 0,
@@ -636,78 +644,6 @@ init_cube_faces <- function(xbins, ybins = xbins, zbins = xbins) {
 }
 
 
-xpand <- function(a, b) {
-  new_data_frame(list(
-    a = rep.int(a, length(b)),
-    b = rep.int(b, rep.int(length(a), length(b)))
-  ))
-}
 
-measure_titlegrob <- function(grob, params, unit = "cm") {
-  if (is.null(grob) || inherits(grob, "zeroGrob")) {
-    return(params)
-  }
-  measure <- measure_labels(grob)
 
-  x <- mean(range(measure$x, na.rm = TRUE))
-  y <- mean(range(measure$y, na.rm = TRUE))
 
-  w <- convertWidth(grobWidth(grob), "cm", valueOnly = TRUE)
-  h <- convertHeight(grobHeight(grob), "cm", valueOnly = TRUE)
-
-  params$min_x <- min(x - 0.5 * w, params$min_x %||% 0)
-  params$max_x <- max(x + 0.5 * w, params$max_x %||% 0)
-  params$min_y <- min(y - 0.5 * h, params$min_y %||% 0)
-  params$max_y <- max(y + 0.5 * h, params$max_y %||% 0)
-
-  return(params)
-}
-
-measure_polygongrob <- function(grob, params, unit = "cm") {
-  if (is.null(grob) || inherits(grob, "zeroGrob")) {
-    return(params)
-  }
-  x <- range(convertUnit(grob$x, unit, valueOnly = TRUE))
-  y <- range(convertUnit(grob$y, unit, valueOnly = TRUE))
-
-  params$min_x <- min(x, params$min_x %||% 0)
-  params$max_x <- max(x, params$max_x %||% 0)
-  params$min_y <- min(y, params$min_y %||% 0)
-  params$max_y <- max(y, params$max_y %||% 0)
-
-  return(params)
-}
-
-measure_labels <- function(grob, unit = "cm") {
-  if (is.null(grob) || inherits(grob, "zeroGrob") || !is.grob(grob)) {
-    return(list(x = NA, y = NA))
-  }
-  if ("children" %in% names(grob)) {
-    if (all(c("xext", "yext") %in% names(grob))) {
-
-      x <- convertUnit(grob$x + unit(range(grob$xext), "pt"),
-                       "cm", valueOnly = TRUE)
-      y <- convertUnit(grob$y + unit(range(grob$yext), "pt"),
-                       "cm", valueOnly = TRUE)
-    } else {
-      # Recursion through the children
-      children <- lapply(unname(grob$children), measure_labels)
-      x <- unlist(lapply(children, `[[`, "x"), recursive = TRUE)
-      y <- unlist(lapply(children, `[[`, "y"), recursive = TRUE)
-    }
-    x <- range(x, na.rm = TRUE)
-    y <- range(y, na.rm = TRUE)
-    return(list(x = x, y = y))
-  }
-  if (inherits(grob, "text")) {
-    x <- convertX(grob$x, "cm", valueOnly = TRUE)
-    y <- convertY(grob$y, "cm", valueOnly = TRUE)
-    w <- convertWidth(stringWidth(grob$label), "cm", valueOnly = TRUE)
-    h <- convertHeight(stringWidth(grob$label), "cm", valueOnly = TRUE)
-    x <- range(c(x + 0.5 * w, x - 0.5 * w), na.rm = TRUE)
-    y <- range(c(y + 0.5 * h, y - 0.5 * h), na.rm = TRUE)
-    return(list(x = x, y = y))
-  } else {
-    return(list(x = NA, y = NA))
-  }
-}

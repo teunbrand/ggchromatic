@@ -85,7 +85,17 @@ clapply <- function(X, test, FUN, ...) {
   return(X)
 }
 
+# Test whether variable is discrete. Void channels are considered discrete for
+# convenience, since the use case is often to apply a transformation to
+# continuous colour channels, but not discrete or void ones.
 is_discrete <- function(x) {
   is.factor(x) || is.character(x) || is.logical(x) || is_void_channel(x)
 }
 
+# Like expand.grid(), but faster
+xpand <- function(a, b) {
+  new_data_frame(list(
+    a = rep.int(a, length(b)),
+    b = rep.int(b, rep.int(length(a), length(b)))
+  ))
+}
