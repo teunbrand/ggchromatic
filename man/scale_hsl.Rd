@@ -138,7 +138,8 @@ NULL
 }
 \seealso{
 Other colour space scales: 
-\code{\link{scale_cmyk}},
+\code{\link{scale_cmy}},
+\code{\link{scale_fill_cmy}()},
 \code{\link{scale_hsv}},
 \code{\link{scale_rgb}}
 }

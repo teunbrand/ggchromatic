@@ -75,7 +75,9 @@ cube guide takes the lesser of the width/height for the size.}
 \item{nbin}{A numeric specifying the number of bins for drawing the
 colourbar. A smoother colourbar results from a larger value.}
 
-\item{rotate}{NOT IMPLEMENTED YET.}
+\item{rotate}{A \code{integer} vector equal in length to the number of channels.
+Changes the order in which channels are displayed in the cube. For example,
+\code{c(1, 3, 2)} swaps the placement of the 2nd and 3rd channels.}
 
 \item{frame.colour}{A string specifying the colour of the frame
 drawn around the bar. If \code{NULL} (the default), no frame is drawn.}

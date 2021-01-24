@@ -34,6 +34,33 @@ is_colour_spec <- function(x) {
   inherits(x, "colour_spec")
 }
 
+spectrum_name <- function(x) {
+  if (is_colour_spec(x)) {
+    # Spectrum name is in 1 class before `colour_spec`
+    i <- match("colour_spec", class(x))
+    name <- class(x)[i - 1]
+    gsub("_spec$", "", name)
+  } else {
+    return(NULL)
+  }
+}
+
+spectrum_constructor <- function(x) {
+  if (is_colour_spec(x)) {
+    x <- spectrum_name(x)
+  }
+  x <- match.arg(x, c("rgb", "cmyk", "hsl", "hsv"))
+  switch(
+    x,
+    "rgb" = rgb_spec,
+    "hsv" = hsv_spec,
+    "hsl" = hsl_spec,
+    "cmyk" = cmyk_spec,
+    rlang::abort("Cannot find constructor for `", spec, "`")
+  )
+}
+
+
 # Utilities ---------------------------------------------------------------
 
 channel_is_discrete <- function(colour_spec) {
@@ -84,16 +111,6 @@ channels_apply_c <- function(X, FUN, ...) {
   }
   X
 }
-
-# channels_lapply <- function(X, FUN, ...) {
-#   Y <- lapply(vec_data(X), FUN, ...)
-#   lens <- lengths(Y)
-#   out <- vec_init(X, max(lens))
-#   for (fname in names(Y)) {
-#     field(out, fname) <- c(Y[[fname]], rep(NA, max(lens) - lens[[fname]]))
-#   }
-#   return(out)
-# }
 
 channels_lapply <- function(X, FUN, ...) {
   Y <- vec_data(X)

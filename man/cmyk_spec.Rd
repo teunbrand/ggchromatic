@@ -22,6 +22,7 @@ cmyk_spec(c("A", "B", "C"), 1:3, 10:8, c("X","Y","Z"))
 }
 \seealso{
 Other colour space vectors: 
+\code{\link{cmy_spec}()},
 \code{\link{hsl_spec}()},
 \code{\link{hsv_spec}()},
 \code{\link{rgb_spec}()}
