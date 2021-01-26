@@ -73,6 +73,23 @@ rescale.void_channel <- function(x, to, from, ...) {
   rep(mean(to), length(x))
 }
 
+# Void functions ----------------------------------------------------------
+
+fill_void <- function(x, fill = 0) {
+  UseMethod("fill_void")
+}
+
+fill_void.default <- function(x, fill = 0) {
+  rlang::abort(paste0("Cannot fill void of `", typeof(x), "` object."))
+}
+
+fill_void.colour_spec <- function(x, fill = 0) {
+  void <- channel_is_void(x)
+  data <- vec_data(x)
+  data <- clapply(data, void, function(i){rep_len(fill, length(i))})
+  vec_restore(data, x)
+}
+
 # Expressions -------------------------------------------------------------
 
 new_vexpression <- function(x) {

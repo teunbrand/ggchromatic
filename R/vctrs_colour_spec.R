@@ -122,6 +122,43 @@ melt_channels <- function(x, channels = fields(x)) {
   vec_c(!!!unname(vec_data(x)[channels]))
 }
 
+set_channel_default <- function(x, channels) {
+  UseMethod("set_channel_default")
+}
+
+set_channel_default.default <- function(x, channels) {
+  rlang::abort(paste0("Don't know how to set default channels for `",
+                      typof(x), "` object."))
+}
+
+set_channel_default.colour_spec <- function(x, channels) {
+  channels <- intersect(channels, fields(x))
+  for (f in channels) {
+    field(x, f) <- rep_len(mean(field(x, f)), length.out = length(x))
+  }
+  x
+}
+
+set_channel_default.hsv_spec <- function(x, channels) {
+  funs <- list(h = min, s = max, v = max)
+  channels <- intersect(channels, fields(x))
+  for (f in channels) {
+    field(x, f) <- rep_len(funs[[f]](field(x, f)), length.out = length(x))
+  }
+  x
+}
+
+set_channel_default.hsl_spec <- function(x, channels) {
+  funs <- list(h = min, s = max, l = mean)
+  channels <- intersect(channels, fields(x))
+  for (f in channels) {
+    field(x, f) <- rep_len(funs[[f]](field(x, f)), length.out = length(x))
+  }
+  x
+}
+
+
+
 merge_hybrid_fields <- function(discrete, continuous) {
   discrete   <- vec_data(discrete)
   continuous <- vec_data(continuous)

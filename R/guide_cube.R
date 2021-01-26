@@ -14,7 +14,7 @@
 #' @param title.offset A `numeric(1)` in centimeters determining how far away
 #'   the axis titles should be drawn relative to the rightmost labels.
 #' @param cubewidth,cubeheight A `numeric(1)` or `grid::unit()` object
-#'   specifying the width/height of the colourcube. Default value is the
+#'   specifying the width/height of the colour cube. Default value is the
 #'   `legend.key.width/height` or `legend.key.size` in the theme. The colour
 #'   cube guide takes the lesser of the width/height for the size.
 #' @param rotate A `integer` vector equal in length to the number of channels.
@@ -125,7 +125,7 @@ guide_train.colourcube <- function(guide, scale, aesthetic = NULL) {
     return(NULL)
   }
   if (length(intersect(scale$aesthetics, guide$available_aes)) == 0) {
-    rlang::warn("colourcube guide needs appropriate scales")
+    rlang::warn("colourcube guide needs appropriate scales.")
     return(NULL)
   }
 
@@ -548,8 +548,12 @@ guide_key_from_chromatic <- function(scale, aes) {
 
   disc <- channel_is_discrete(breaks) & !channel_is_void(breaks)
 
-  scaled_breaks <- scale$rescale(breaks, limits = limits)
-  scaled_breaks <- vec_data(scaled_breaks)
+  scaled_breaks <- vec_data(scale$rescale(breaks, limits = limits))
+  scaled_limits <- vec_data(scale$rescale(limits, limits = limits))
+  void <- vapply(scaled_limits, function(x) all(is.na(x)), logical(1))
+  scaled_breaks[!void] <- mapply(rescale, x = scaled_breaks[!void],
+                                 from = scaled_limits[!void],
+                                 SIMPLIFY = FALSE)
 
   # Manually rescale discrete breaks because of tick mark placement
   for (f in fields(breaks)[disc]) {

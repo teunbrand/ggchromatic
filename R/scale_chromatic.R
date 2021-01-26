@@ -196,16 +196,18 @@ ScaleChromatic <- ggproto(
   apply_oob = function(self, x, limits = self$get_limits(),
                        oob = self$oob) {
     # Wrapper for `self$oob()`, apply to continuous fields only
-    discrete <- channel_is_discrete(limits)
+    discrete <- channel_is_discrete(limits) | channel_is_discrete(x)
     for (f in fields(limits)[!discrete]) {
       field(x, f) <- oob(field(x, f), range = without_nas(field(limits, f)))
     }
     return(x)
   },
 
-  map = function(self, x, limits = self$get_limits()) {
+  map = function(self, x, limits = self$get_limits(),
+                 channel_limits = self$channel_limits) {
 
-    x <- self$rescale(self$apply_oob(x, limits = limits), limits = limits)
+    x <- self$rescale(self$apply_oob(x, limits = limits),
+                      limits = limits, channel_limits = channel_limits)
 
     uniq <- unique(x)
     pal <- self$palette(uniq)
