@@ -129,3 +129,9 @@ rectangle raster displaying the colours.
 \examples{
 NULL
 }
+\seealso{
+Other guides for chromatic scales: 
+\code{\link{guide_chromatic}()},
+\code{\link{guide_colourcube}()}
+}
+\concept{guides for chromatic scales}

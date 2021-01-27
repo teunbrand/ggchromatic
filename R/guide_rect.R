@@ -22,6 +22,7 @@
 #'
 #' @return A `guide_colourrect` S3 object.
 #' @export
+#' @family guides for chromatic scales
 #'
 #' @examples
 #' NULL
@@ -268,7 +269,8 @@ build_rect_grob <- function(guide, theme) {
   rectgrob <- rasterGrob(guide$rstr,
                          width = width,
                          height = height,
-                         default.units = "cm")
+                         default.units = "cm",
+                         interpolate = FALSE)
 
   params <- list(
     size = list(width = width, height = height)
@@ -282,15 +284,40 @@ build_rect_frame <- function(guide, params) {
   width <- params$size$width
   height <- params$size$height
 
-  x = c(0, 0, 1)
-  y = c(1, 0, 0)
+  x = c(0, 0, 1, 1, 0)
+  y = c(1, 0, 0, 1, 1)
+  id <- c(1, 1, 1, 1, 1)
+  n <- length(id)
 
-  grob <- linesGrob(x = x, y = y,
-                    gp = gpar(
-                      col = guide$frame.colour,
-                      lty = guide$frame.linetype,
-                      lwd = guide$frame.linewidth * .pt
-                    ))
+  if (any(guide$key$.discrete)) {
+    key <- guide$key[guide$key$.discrete, ]
+    if (any(key$.channel == 1)) {
+      beam <- key[key$.channel == 1]
+      value <- diff(beam$.value) / 2 + head(beam$.value, -1)
+      len <- length(value)
+      x <- c(x, rep(value, 2))
+      y <- c(y, rep(c(0, 1), each = len))
+      id <- c(id, rep(id[n] + seq_len(len), 2))
+      n <- length(id)
+    }
+    if (any(key$.channel == 2)) {
+      beam <- key[key$.channel == 2]
+      value <- diff(beam$.value) / 2 + head(beam$.value, -1)
+      len <- length(value)
+      x <- c(x, rep(c(0, 1), each = len))
+      y <- c(y, rep(value, 2))
+      id <- c(id, rep(id[n] + seq_len(len), 2))
+      n <- length(id)
+    }
+  }
+
+  grob <- polylineGrob(x = x, y = y,
+                       id = id,
+                       gp = gpar(
+                         col = guide$frame.colour,
+                         lty = guide$frame.linetype,
+                         lwd = guide$frame.linewidth * .pt
+                       ))
   return(grob)
 }
 
@@ -343,6 +370,7 @@ build_rect_axes <- function(guide, theme, params) {
       label.theme,
       label = .labels[[2]],
       y = unit(values[[2]], "npc"),
+      hjust = 1,
       check.overlap = guide$check.overlap
     )
   } else {
@@ -370,7 +398,7 @@ build_rect_titles <- function(guide, theme, params) {
     title.theme$hjust %||% 0.5
   title.vjust <- guide$title.vjust %||% title.theme$vjust %||% 0.5
 
-  if (length(guide$title) > 1) {
+  if (length(guide$title) == 2) {
     label <- c(guide$title, rep("", 2 - length(guide$title)))
 
     xtitle <- element_grob(
@@ -384,6 +412,7 @@ build_rect_titles <- function(guide, theme, params) {
       title.theme,
       label = label[2],
       vjust = title.vjust,
+      angle = 90,
       margin_x = TRUE,
       margin_y = TRUE
     )
