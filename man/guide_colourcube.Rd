@@ -119,3 +119,9 @@ isometric cube displaying the colours.
 \examples{
 NULL
 }
+\seealso{
+Other guides for chromatic scales: 
+\code{\link{guide_chromatic}()},
+\code{\link{guide_colourrect}()}
+}
+\concept{guides for chromatic scales}

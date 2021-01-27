@@ -23,6 +23,7 @@
 #'
 #' @return A `guide_colourcube` S3 object.
 #' @export
+#' @family guides for chromatic scales
 #'
 #' @examples
 #' NULL
@@ -345,7 +346,7 @@ build_cube_frame <- function(key, theme, params, colour, linetype, linewidth) {
       beam <- key[key$.channel == 2, ]
       value <- diff(beam$.value) / 2 + head(beam$.value, -1)
       init <- list(
-        rep(c(1, 0, 0, 1), length(value)),
+        rep(c(1, 0, 0, 0), length(value)),
         rep(c(0, 0, 0, 1), length(value))
       )
       beam <- vec_set_names(
@@ -393,7 +394,11 @@ build_cube_axes <- function(guide, theme, params) {
   key <- guide$key
   nr <- nrow(key)
   values <- split(key$.value, key$.channel)
+  values <- c(values, rep(list(numeric()), 3 - length(values)))
+  values[[1]] <- 1 - values[[1]]
+  values[[3]] <- 1 - values[[3]]
   .labels <- split(key$.label, key$.channel)
+  .labels <- c(.labels, rep(list(character()), 3 - length(.labels)))
 
   ticklength <- 0.05
 
@@ -549,11 +554,16 @@ guide_key_from_chromatic <- function(scale, aes) {
   disc <- channel_is_discrete(breaks) & !channel_is_void(breaks)
 
   scaled_breaks <- vec_data(scale$rescale(breaks, limits = limits))
-  scaled_limits <- vec_data(scale$rescale(limits, limits = limits))
+  scaled_limits <- as.list(vec_data(scale$rescale(limits, limits = limits)))
   void <- vapply(scaled_limits, function(x) all(is.na(x)), logical(1))
-  scaled_breaks[!void] <- mapply(rescale, x = scaled_breaks[!void],
-                                 from = scaled_limits[!void],
-                                 SIMPLIFY = FALSE)
+  scaled_limits <- clapply(scaled_limits, !void, range, na.rm = TRUE)
+
+  scaled_breaks[!void] <- mapply(
+    rescale,
+    x = scaled_breaks[!void],
+    from = scaled_limits[!void],
+    SIMPLIFY = FALSE
+  )
 
   # Manually rescale discrete breaks because of tick mark placement
   for (f in fields(breaks)[disc]) {
