@@ -550,7 +550,7 @@ decompose_title <- function(title, sep = NULL) {
   lang <- str2lang(as_string(title))
   if (is_call(lang)) {
     args <- unname(call_args(lang))
-    args <- vapply(args, as_string, character(1))
+    args <- vapply(args, as_label, character(1))
     return(args)
   }
   if (!is.null(sep)) {
