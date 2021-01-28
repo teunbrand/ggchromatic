@@ -1,4 +1,59 @@
+
+# Constructor -------------------------------------------------------------
+
+new_colour_spec <- function(..., class) {
+  vals <- rlang::list2(...)
+  missing <- vapply(vals, identical, logical(1), quote(expr = ))
+  vals[missing] <- list(double())
+
+  n <- lengths(vals)
+  vals[n == 0] <- list(new_void_channel(max(n)))
+  vals <- vec_recycle_common(!!!vals)
+  new_rcrd(vals, class = c("colour_spec", class))
+}
+
+
+# Boilerplate -------------------------------------------------------------
+
+#' @export
+vec_ptype2.colour_spec.colour_spec <- function(x, y, ...) {
+  if (!all(class(x)[1:3] == class(y)[1:3])) {
+    stop_incompatible_type(x, y, ...)
+  }
+  z <- mapply(vec_ptype2, x = vec_data(x), y = vec_data(y),
+              x_arg = fields(x),
+              SIMPLIFY = FALSE)
+  vec_restore(z, x)
+}
+
+#' @export
+vec_ptype2.colour_spec.double <- function(x, y, ...) {
+  spectrum_constructor(x)()
+}
+
+#' @export
+vec_cast.colour_spec.colour_spec <- function(x, to, ...) x
+
+#' @export
+vec_cast.colour_spec.double <- function(x, to, ...) {
+  fun <- spectrum_constructor(to)
+  x <- vec_set_names(rep(list(x), n_fields(fun())), fields(fun()))
+  do.call(fun, x)
+}
+
 # Methods -----------------------------------------------------------------
+
+#' @export
+#' @method vec_ptype_abbr colour_spec
+vec_ptype_abbr.colour_spec <- function(x, ...) {
+  gsub("_spec$", "", class(x)[[2]])
+}
+
+#' @export
+#' @method vec_ptype_full colour_spec
+vec_ptype_full.colour_spec <- function(x, ...) {
+  class(x)[[2]]
+}
 
 #' @export
 #' @method format colour_spec
@@ -36,9 +91,9 @@ is_colour_spec <- function(x) {
 
 spectrum_name <- function(x) {
   if (is_colour_spec(x)) {
-    # Spectrum name is in 1 class before `colour_spec`
+    # Spectrum name is in 1 class after `colour_spec`
     i <- match("colour_spec", class(x))
-    name <- class(x)[i - 1]
+    name <- class(x)[i + 1]
     gsub("_spec$", "", name)
   } else {
     return(NULL)
@@ -49,15 +104,23 @@ spectrum_constructor <- function(x) {
   if (is_colour_spec(x)) {
     x <- spectrum_name(x)
   }
-  x <- match.arg(x, c("rgb", "cmyk", "hsl", "hsv"))
+  x <- match.arg(x, c("rgb", "cmyk", "hsl", "hsv", "hcl", "cmy"))
   switch(
     x,
     "rgb" = rgb_spec,
     "hsv" = hsv_spec,
     "hsl" = hsl_spec,
     "cmyk" = cmyk_spec,
-    rlang::abort("Cannot find constructor for `", spec, "`")
+    "cmy" = cmy_spec,
+    "hcl" = hcl_spec,
+    rlang::abort("Cannot find constructor for `", typof(x), "`")
   )
+}
+
+#' @export
+#' @method scale_type colour_spec
+scale_type.colour_spec <- function(x) {
+  spectrum_name(x)
 }
 
 

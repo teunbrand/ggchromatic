@@ -140,6 +140,7 @@ NULL
 Other colour space scales: 
 \code{\link{scale_cmy}},
 \code{\link{scale_fill_cmy}()},
+\code{\link{scale_hcl}},
 \code{\link{scale_hsl}},
 \code{\link{scale_rgb}}
 }
