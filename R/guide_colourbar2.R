@@ -7,7 +7,7 @@
 #' @param channel A `character(1)` with the channel name to display. The
 #'   default, `"auto"`, removes empty channels and subsequently takes the first.
 #'
-#' @return
+#' @return A `guide`, `colourbar2` S3 list object.
 #' @export
 #'
 #' @examples

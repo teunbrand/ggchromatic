@@ -113,7 +113,7 @@ spectrum_constructor <- function(x) {
     "cmyk" = cmyk_spec,
     "cmy" = cmy_spec,
     "hcl" = hcl_spec,
-    rlang::abort("Cannot find constructor for `", typof(x), "`")
+    rlang::abort("Cannot find constructor for `", typeof(x), "`")
   )
 }
 
@@ -191,7 +191,7 @@ set_channel_default <- function(x, channels) {
 
 set_channel_default.default <- function(x, channels) {
   rlang::abort(paste0("Don't know how to set default channels for `",
-                      typof(x), "` object."))
+                      typeof(x), "` object."))
 }
 
 set_channel_default.colour_spec <- function(x, channels) {

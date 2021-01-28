@@ -3,7 +3,7 @@
 #' These functions create a vectors that store values specifying different
 #' channels in a colour space.
 #'
-#' @param h,c,l,r,g,b,m,y,k Colour channels. Abbreviations are colour space
+#' @param h,c,l,s,v,r,g,b,m,y,k Colour channels. Abbreviations are colour space
 #'   specific and written in full in the **Functions** section. Can be a mix of
 #'   `logical`, `integer`, `double`, `character` or `factor` vectors of equal
 #'   length or length 1.

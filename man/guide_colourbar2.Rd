@@ -134,7 +134,7 @@ for which a colourbar can be drawn.}
 \item{...}{ignored.}
 }
 \value{
-
+A \code{guide}, \code{colourbar2} S3 list object.
 }
 \description{
 This is just like the regular \code{guide_colourbar}, but with a specialised

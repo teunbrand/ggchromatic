@@ -66,3 +66,27 @@ measure_labels <- function(grob, unit = "cm") {
     return(list(x = NA, y = NA))
   }
 }
+
+width_cm <- function(x) {
+  if (is.grob(x)) {
+    convertWidth(grobWidth(x), "cm", TRUE)
+  } else if (is.unit(x)) {
+    convertWidth(x, "cm", TRUE)
+  } else if (is.list(x)) {
+    vapply(x, width_cm, numeric(1))
+  } else {
+    rlang::abort("`width_cm()` has encountered unknown input.")
+  }
+}
+
+height_cm <- function(x) {
+  if (is.grob(x)) {
+    convertHeight(grobHeight(x), "cm", TRUE)
+  } else if (is.unit(x)) {
+    convertHeight(x, "cm", TRUE)
+  } else if (is.list(x)) {
+    vapply(x, height_cm, numeric(1))
+  } else {
+    rlang::abort("`height_cm`() has encountered unknown input.")
+  }
+}

@@ -194,10 +194,10 @@ guide_gengrob.colourrect <- function(guide, theme) {
 
   titles <- build_rect_titles(guide, theme, col_params)
 
-  hgap <- ggplot2:::width_cm(theme$legend.spacing.x %||%
-                               0.5 * unit(titles$fontsize, "pt"))
-  vgap <- ggplot2:::height_cm(theme$legend.spacing.y %||%
-                                0.5 * unit(titles$fontsize, "pt"))
+  hgap <- width_cm(theme$legend.spacing.x %||%
+                     0.5 * unit(titles$fontsize, "pt"))
+  vgap <- height_cm(theme$legend.spacing.y %||%
+                      0.5 * unit(titles$fontsize, "pt"))
 
 
   widths <- c(titles$width, hgap, axes$label.width,
@@ -266,8 +266,8 @@ build_rect_grob <- function(guide, theme) {
   height <- theme$legend.key.height %||% theme$legend.key.size
 
   # What does guide think?
-  width  <- ggplot2:::width_cm(guide$rectwidth   %||% width * 4)
-  height <- ggplot2:::height_cm(guide$rectheight %||% height * 4)
+  width  <- width_cm(guide$rectwidth   %||% width * 4)
+  height <- height_cm(guide$rectheight %||% height * 4)
 
   rectgrob <- rasterGrob(guide$rstr,
                          width = width,

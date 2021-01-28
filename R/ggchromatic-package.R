@@ -5,6 +5,8 @@
 #' @import vctrs
 #' @import grid
 #' @import gtable
+#' @importFrom stats setNames
+#' @importFrom utils head tail
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage

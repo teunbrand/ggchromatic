@@ -4,10 +4,10 @@
 \name{ggchromatic-package}
 \alias{ggchromatic}
 \alias{ggchromatic-package}
-\title{ggchromatic: Colourspace colour scales for ggplot2}
+\title{ggchromatic: Colourspace Scales for ggplot2}
 \description{
 The 'ggchromatic' package provides additional colour and fill 
-  scales to use with 'ggplot2' It uses the 'ggplot2' extension system to map 
+  scales to use with 'ggplot2'. It uses the 'ggplot2' extension system to map 
   a number of variables to different colourspaces with the 'farver' package.
 }
 \author{

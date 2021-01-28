@@ -23,7 +23,7 @@ cmyk_spec(c = double(), m = double(), y = double(), k = double())
 cmy_spec(c = double(), m = double(), y = double())
 }
 \arguments{
-\item{h, c, l, r, g, b, m, y, k}{Colour channels. Abbreviations are colour space
+\item{h, c, l, s, v, r, g, b, m, y, k}{Colour channels. Abbreviations are colour space
 specific and written in full in the \strong{Functions} section. Can be a mix of
 \code{logical}, \code{integer}, \code{double}, \code{character} or \code{factor} vectors of equal
 length or length 1.}

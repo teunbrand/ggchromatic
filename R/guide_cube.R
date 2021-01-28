@@ -207,10 +207,10 @@ guide_gengrob.colourcube <- function(guide, theme) {
   pos_y <- 2
 
   if (length(guide$title) == 1) {
-    hgap <- ggplot2:::width_cm(theme$legend.spacing.x %||%
-                                 (0.5 * unit(tpar$title_fontsize, "pt")))
-    vgap <- ggplot2:::height_cm(theme$legend.spacing.y %||%
-                                  (0.5 * unit(tpar$title_fontsize, "pt")))
+    hgap <- width_cm(theme$legend.spacing.x %||%
+                       (0.5 * unit(tpar$title_fontsize, "pt")))
+    vgap <- height_cm(theme$legend.spacing.y %||%
+                        (0.5 * unit(tpar$title_fontsize, "pt")))
     switch(
       guide$title.position,
       "top" = {
@@ -279,8 +279,8 @@ build_cube_grob <- function(guide, theme) {
   height <- theme$legend.key.height %||% theme$legend.key.size
 
   # What does guide think about size?
-  width  <- ggplot2:::width_cm(guide$cubewidth   %||% width * 5)
-  height <- ggplot2:::height_cm(guide$cubeheight %||% height * 5)
+  width  <- width_cm(guide$cubewidth   %||% width * 5)
+  height <- height_cm(guide$cubeheight %||% height * 5)
 
   # Take minimum of width/height
   size <- min(width, height)
@@ -531,8 +531,8 @@ build_cube_titles <- function(guide, theme, params) {
       margin_y = TRUE
     )
 
-    params$title_width  <- ggplot2:::width_cm(grob)
-    params$title_height <- ggplot2:::height_cm(grob)
+    params$title_width  <- width_cm(grob)
+    params$title_height <- height_cm(grob)
     params$title_fontsize <- title.theme$size %||%
       calc_element("legend.title", theme)$size %||%
       calc_element("text", theme)$size %||% 11

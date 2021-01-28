@@ -99,3 +99,8 @@ xpand <- function(a, b) {
     b = rep.int(b, rep.int(length(a), length(b)))
   ))
 }
+
+globalVariables(
+  c("x", "y", "z"),
+  package = "ggchromatic"
+)
