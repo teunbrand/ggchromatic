@@ -549,8 +549,15 @@ decompose_title <- function(title, sep = NULL) {
   }
   lang <- str2lang(as_string(title))
   if (is_call(lang)) {
-    args <- unname(call_args(lang))
-    args <- vapply(args, as_label, character(1))
+    lang <- call_standardise(lang)
+    args <- call_args(lang)
+    fun  <- fn_fmls_names(call_fn(lang))
+    init <- rep(list(expr()), length(fun))
+    i <- match(names(args), fun)
+    j <- match(fun, names(args))
+    init[!is.na(j)] <- unname(args)[!is.na(i)]
+    args <- vapply(init, as_label, character(1))
+    args[args == "<empty>"] <- ""
     return(args)
   }
   if (!is.null(sep)) {
