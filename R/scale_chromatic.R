@@ -80,7 +80,7 @@ chromatic_scale <- function(
   expand = waiver(),
   na.value = "grey50",
   trans = "identity",
-  guide = "colourcube",
+  guide = "chromatic",
   prototype = NULL,
   channel_limits = NULL,
   super = ScaleChromatic
