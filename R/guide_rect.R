@@ -147,7 +147,7 @@ guide_train.colourrect <- function(guide, scale, aesthetic = NULL) {
   if (anyNA(channels)) {
     rlang::abort("Invalid channel specification in colourrect guide.")
   }
-  if (length(guide$title) == 3) {
+  if (length(guide$title) > 1) {
     guide$title <- guide$title[channels]
   }
   guide$key$.channel <- match(guide$key$.channel, channels)
@@ -158,6 +158,8 @@ guide_train.colourrect <- function(guide, scale, aesthetic = NULL) {
 
   disc <- vapply(limits, is_discrete, logical(1))
   limits <- without_nas(lapply(limits, unique))
+  lim_len <- lengths(limits)
+  limits[lim_len == 0] <- list(NA)
 
   # Sequence between continuous limits
   cols <- clapply(limits, !disc, function(x) {
@@ -167,6 +169,7 @@ guide_train.colourrect <- function(guide, scale, aesthetic = NULL) {
 
   # Make colours
   cols <- setNames(xpand(cols[[1]], rev(cols[[2]])), names(bins))
+  cols <- cols[lim_len > 0]
   cols <- do.call(scale$ptype, cols)
   ch_lim <- set_channel_default(scale$channel_limits,
                                 setdiff(names(void), names(bins)))
@@ -324,11 +327,14 @@ build_rect_frame <- function(guide, params) {
 build_rect_axes <- function(guide, theme, params) {
   key <- guide$key
   values <- split(key$.value, key$.channel)
+  values <- c(values, rep(list(numeric()), 2 - length(values)))
   .labels <- split(key$.label, key$.channel)
+  .labels <- c(.labels, rep(list(character()), 2 - length(.labels)))
 
   ticklength <- 0.05
 
-  if (guide$ticks) {
+  # Do tickmarks
+  if (guide$ticks && length(values[[1]]) > 0) {
     xticks <- polylineGrob(
       x = unit(rep(values[[1]], 2), "npc"),
       y = unit(rep(c(0, ticklength), each = length(values[[1]])), "cm"),
@@ -338,6 +344,11 @@ build_rect_axes <- function(guide, theme, params) {
         lwd = guide$ticks.linewidth * .pt
       )
     )
+  } else {
+    xticks <- zeroGrob()
+  }
+
+  if (guide$ticks && length(values[[2]]) > 0) {
     yticks <- polylineGrob(
       x = unit(rep(c(0, ticklength), each = length(values[[2]])), "cm"),
       y = unit(rep(values[[2]], 2), "npc"),
@@ -348,13 +359,16 @@ build_rect_axes <- function(guide, theme, params) {
       )
     )
   } else {
-    xticks <- zeroGrob()
     yticks <- zeroGrob()
+  }
+  if (inherits(xticks, "zeroGrob") && inherits(yticks, "zeroGrob")) {
     ticklength <- 0
   }
 
-  if (guide$label) {
-    label.theme <- guide$label.theme %||% calc_element("legend.text", theme)
+  # Do label
+  label.theme <- guide$label.theme %||% calc_element("legend.text", theme)
+
+  if (guide$label && length(.labels[[1]]) > 0) {
     height <- convertUnit(stringHeight(.labels[[1]]), "cm", valueOnly = TRUE)
     height <- max(height)
     xlabs <- element_grob(
@@ -363,7 +377,12 @@ build_rect_axes <- function(guide, theme, params) {
       x = unit(values[[1]], "npc"),
       check.overlap = guide$check.overlap
     )
+  } else {
+    xlabs <- zeroGrob()
+    height <- 0
+  }
 
+  if (guide$label && length(.labels[[2]]) > 0) {
     width <- convertUnit(stringWidth(.labels[[2]]), "cm", valueOnly = TRUE)
     width <- max(width)
     ylabs <- element_grob(
@@ -374,10 +393,8 @@ build_rect_axes <- function(guide, theme, params) {
       check.overlap = guide$check.overlap
     )
   } else {
-    height <- 0
-    width <- 0
-    xlabs <- zeroGrob()
     ylabs <- zeroGrob()
+    width <- 0
   }
 
   out <- list(
@@ -432,3 +449,7 @@ build_rect_titles <- function(guide, theme, params) {
     ))
   }
 }
+
+#' @export
+#' @rdname guide_colourrect
+guide_colorrect <- guide_colourrect

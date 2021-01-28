@@ -2,9 +2,39 @@
 % Please edit documentation in R/guide_rect.R
 \name{guide_colourrect}
 \alias{guide_colourrect}
+\alias{guide_colorrect}
 \title{Chromatic colour rectangle guide}
 \usage{
 guide_colourrect(
+  title = waiver(),
+  title.position = NULL,
+  title.theme = NULL,
+  title.hjust = NULL,
+  title.vjust = NULL,
+  label = TRUE,
+  label.position = NULL,
+  label.theme = NULL,
+  label.hjust = NULL,
+  label.vjust = NULL,
+  check.overlap = TRUE,
+  rectwidth = NULL,
+  rectheight = NULL,
+  nbin = 50,
+  raster = TRUE,
+  frame.colour = "black",
+  frame.linewidth = 0.5,
+  frame.linetype = 1,
+  ticks = TRUE,
+  ticks.colour = "black",
+  ticks.linewidth = 0.5,
+  default.unit = "line",
+  channels = "auto",
+  order = 0,
+  available_aes = c("colour", "color", "fill"),
+  ...
+)
+
+guide_colorrect(
   title = waiver(),
   title.position = NULL,
   title.theme = NULL,

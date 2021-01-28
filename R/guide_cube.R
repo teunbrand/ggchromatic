@@ -130,7 +130,7 @@ guide_train.colourcube <- function(guide, scale, aesthetic = NULL) {
     return(NULL)
   }
 
-  aes <- aesthetic %||% scale$aesthetic[[1]]
+  aes <- aesthetic %||% scale$aesthetics[[1]]
   rot <- guide$rotate[1:3]
 
   guide$key <- guide_key_from_chromatic(scale, aes)
@@ -657,7 +657,6 @@ init_cube_faces <- function(xbins, ybins = xbins, zbins = xbins) {
   coords
 }
 
-
-
-
-
+#' @export
+#' @rdname guide_colourcube
+guide_colorcube <- guide_colourcube

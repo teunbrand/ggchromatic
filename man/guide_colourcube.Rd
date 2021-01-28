@@ -2,9 +2,37 @@
 % Please edit documentation in R/guide_cube.R
 \name{guide_colourcube}
 \alias{guide_colourcube}
+\alias{guide_colorcube}
 \title{Chromatic colour cube guide}
 \usage{
 guide_colourcube(
+  title = waiver(),
+  title.position = NULL,
+  title.theme = NULL,
+  title.hjust = NULL,
+  title.vjust = NULL,
+  title.offset = 0.2,
+  label = TRUE,
+  label.theme = NULL,
+  label.hjust = NULL,
+  label.vjust = NULL,
+  cubewidth = NULL,
+  cubeheight = NULL,
+  nbin = 20,
+  rotate = c(1, 2, 3, 4),
+  frame.colour = "black",
+  frame.linewidth = 0.5,
+  frame.linetype = 1,
+  ticks = TRUE,
+  ticks.colour = "black",
+  ticks.linewidth = 0.5,
+  default.unit = "line",
+  order = 0,
+  available_aes = c("colour", "color", "fill"),
+  ...
+)
+
+guide_colorcube(
   title = waiver(),
   title.position = NULL,
   title.theme = NULL,
