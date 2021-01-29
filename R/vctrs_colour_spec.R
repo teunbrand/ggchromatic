@@ -158,14 +158,6 @@ channels_continuous <- function(colour_spec, parellel = FALSE) {
   }
 }
 
-channels_apply <- function(X, FUN, ...) {
-  channels <- fields(X)
-  for (channel in channels) {
-    field(X, channel) <- FUN(field(X, channel), ...)
-  }
-  X
-}
-
 channels_apply_c <- function(X, FUN, ...) {
   continuous <- !vapply(vec_data(X), is_discrete, logical(1))
   channels <- fields(X)[continuous]
@@ -173,12 +165,6 @@ channels_apply_c <- function(X, FUN, ...) {
     field(X, channel) <- FUN(field(X, channel), ...)
   }
   X
-}
-
-channels_lapply <- function(X, FUN, ...) {
-  Y <- vec_data(X)
-  Y[] <- lapply(Y, FUN, ...)
-  vec_restore(Y, X)
 }
 
 melt_channels <- function(x, channels = fields(x)) {
