@@ -4,16 +4,22 @@
 \alias{scale_chromatic}
 \alias{scale_colour_rgb}
 \alias{scale_fill_rgb}
+\alias{scale_color_rgb}
 \alias{scale_colour_hsv}
 \alias{scale_fill_hsv}
+\alias{scale_color_hsv}
 \alias{scale_colour_hsl}
 \alias{scale_fill_hsl}
+\alias{scale_color_hsl}
 \alias{scale_colour_hcl}
 \alias{scale_fill_hcl}
+\alias{scale_color_hcl}
 \alias{scale_colour_cmyk}
 \alias{scale_fill_cmyk}
+\alias{scale_color_cmyk}
 \alias{scale_colour_cmy}
 \alias{scale_fill_cmy}
+\alias{scale_color_cmy}
 \title{Colour space scales}
 \usage{
 scale_colour_rgb(..., aesthetics = "colour")

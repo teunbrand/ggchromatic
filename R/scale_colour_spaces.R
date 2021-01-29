@@ -27,84 +27,125 @@ NULL
 #' @export
 #' @rdname scale_chromatic
 scale_colour_rgb <- function(..., aesthetics = "colour") {
-  chromatic_scale(aesthetics, "colour_rgb", rgb_palette, prototype = rgb_spec)
+  chromatic_scale(aesthetics, "colour_rgb", rgb_palette, ...,
+                  prototype = rgb_spec)
 }
 
 #' @export
 #' @rdname scale_chromatic
 scale_fill_rgb <- function(..., aesthetics = "fill") {
-  chromatic_scale(aesthetics, "fill_rgb", rgb_palette, prototype = rgb_spec)
+  chromatic_scale(aesthetics, "fill_rgb", rgb_palette, ...,
+                  prototype = rgb_spec)
 }
+
+#' @export
+#' @rdname scale_chromatic
+#' @usage NULL
+scale_color_rgb <- scale_colour_rgb
 
 # HSV ---------------------------------------------------------------------
 
 #' @export
 #' @rdname scale_chromatic
 scale_colour_hsv <- function(..., aesthetics = "colour") {
-  chromatic_scale(aesthetics, "colour_hsv", hsv_palette, prototype = hsv_spec)
+  chromatic_scale(aesthetics, "colour_hsv", hsv_palette, ...,
+                  prototype = hsv_spec)
 }
 
 #' @export
 #' @rdname scale_chromatic
 scale_fill_hsv <- function(..., aesthetics = "fill") {
-  chromatic_scale(aesthetics, "fill_hsv", hsv_palette, prototype = hsv_spec)
+  chromatic_scale(aesthetics, "fill_hsv", hsv_palette, ...,
+                  prototype = hsv_spec)
 }
+
+#' @export
+#' @rdname scale_chromatic
+#' @usage NULL
+scale_color_hsv <- scale_colour_hsv
 
 # HSL ---------------------------------------------------------------------
 
 #' @export
 #' @rdname scale_chromatic
 scale_colour_hsl <- function(..., aesthetics = "colour") {
-  chromatic_scale(aesthetics, "colour_hsl", hsl_palette, prototype = hsl_spec)
+  chromatic_scale(aesthetics, "colour_hsl", hsl_palette, ...,
+                  prototype = hsl_spec)
 }
 
 #' @export
 #' @rdname scale_chromatic
 scale_fill_hsl <- function(..., aesthetics = "fill") {
-  chromatic_scale(aesthetics, "fill_hsl", hsl_palette, prototype = hsl_spec)
+  chromatic_scale(aesthetics, "fill_hsl", hsl_palette, ...,
+                  prototype = hsl_spec)
 }
+
+#' @export
+#' @rdname scale_chromatic
+#' @usage NULL
+scale_color_hsl <- scale_colour_hsl
 
 # HCL ---------------------------------------------------------------------
 
 #' @export
 #' @rdname scale_chromatic
 scale_colour_hcl <- function(..., aesthetics = "colour") {
-  chromatic_scale(aesthetics, "colour_hcl", hcl_palette, prototype = hcl_spec)
+  chromatic_scale(aesthetics, "colour_hcl", hcl_palette, ...,
+                  prototype = hcl_spec)
 }
 
 #' @export
 #' @rdname scale_chromatic
 scale_fill_hcl <- function(..., aesthetics = "fill") {
-  chromatic_scale(aesthetics, "fill_hcl", hcl_palette, prototype = hcl_spec)
+  chromatic_scale(aesthetics, "fill_hcl", hcl_palette, ...,
+                  prototype = hcl_spec)
 }
+
+#' @export
+#' @rdname scale_chromatic
+#' @usage NULL
+scale_color_hcl <- scale_colour_hcl
 
 # CMYK --------------------------------------------------------------------
 
 #' @export
 #' @rdname scale_chromatic
 scale_colour_cmyk <- function(..., aesthetics = "colour") {
-  chromatic_scale(aesthetics, "colour_cmyk",
-                  cmyk_palette, prototype = cmyk_spec)
+  chromatic_scale(aesthetics, "colour_cmyk", cmyk_palette, ...,
+                  prototype = cmyk_spec)
 }
 
 #' @export
 #' @rdname scale_chromatic
 scale_fill_cmyk <- function(..., aesthetics = "fill") {
-  chromatic_scale(aesthetics, "fill_cmyk", cmyk_palette, prototype = cmyk_spec)
+  chromatic_scale(aesthetics, "fill_cmyk", cmyk_palette, ...,
+                  prototype = cmyk_spec)
 }
+
+#' @export
+#' @rdname scale_chromatic
+#' @usage NULL
+scale_color_cmyk <- scale_colour_cmyk
 
 # CMY ---------------------------------------------------------------------
 
 #' @export
 #' @rdname scale_chromatic
 scale_colour_cmy <- function(..., aesthetics = "colour") {
-  chromatic_scale(aesthetics, "colour_cmy", cmy_palette, prototype = cmy_spec)
+  chromatic_scale(aesthetics, "colour_cmy", cmy_palette, ...,
+                  prototype = cmy_spec)
 }
 
 #' @export
 #' @rdname scale_chromatic
 scale_fill_cmy <- function(..., aesthetics = "fill") {
-  chromatic_scale(aesthetics, "fill_cmy", cmy_palette, prototype = cmy_spec)
+  chromatic_scale(aesthetics, "fill_cmy", cmy_palette, ...,
+                  prototype = cmy_spec)
 }
+
+#' @export
+#' @rdname scale_chromatic
+#' @usage NULL
+scale_color_cmy <- scale_colour_cmy
 
 
