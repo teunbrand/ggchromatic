@@ -228,30 +228,6 @@ ScaleChromatic <- ggproto(
     x
   },
 
-  transform_df = function(self, df) {
-    if (ggplot2:::empty(df)) {
-      return()
-    }
-    aesthetics <- intersect(self$aesthetics, names(df))
-    if (length(aesthetics) == 0) {
-      return()
-    }
-
-    channel_aes <- setdiff(aesthetics, c("colour", "fill"))
-    not_channel <- setdiff(aesthetics, channel_aes)
-    if (length(channel_aes) > 0 && length(not_channel) == 0) {
-      # Reconstruct colour spec from channel aesthetics
-      new <- df[channel_aes]
-      colnames(new) <- substr(colnames(new), 1, 1)
-      new <- do.call(self$ptype, as.list(new))
-      df[[self$aesthetics[[1]]]] <- new
-      df[channel_aes] <- NULL
-      aesthetics <- intersect(self$aesthetics, names(df))
-    }
-
-    lapply(df[aesthetics], self$transform)
-  },
-
   get_limits = function(self) {
 
     if (self$is_empty()) {

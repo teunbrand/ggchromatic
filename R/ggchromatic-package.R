@@ -7,6 +7,7 @@
 #' @import gtable
 #' @importFrom stats setNames
 #' @importFrom utils head tail
+#' @importFrom farver encode_colour
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage
