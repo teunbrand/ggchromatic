@@ -429,12 +429,12 @@ build_cube_axes <- function(guide, theme, params) {
       y = rescale(y, from = params$range$y, to = c(0, params$size$height)),
       hjust = rep(c(0, 0, 0.5), lens),
       vjust = rep(c(0.5, 0.5, 0), lens),
-      lab = unlist(.labels)
+      lab = vec_c(!!!unname(.labels))
     )
     label.theme <- guide$label.theme %||% calc_element("legend.text", theme)
     label_grob <- with(labels, element_grob(
       label.theme,
-      label = lab, x = unit(x, "cm"), y = unit(y, "cm"),
+      label = unwrap_vexpr(lab), x = unit(x, "cm"), y = unit(y, "cm"),
       hjust = hjust, vjust = vjust,
       check.overlap = guide$check.overlap,
     ))

@@ -92,7 +92,7 @@ fill_void.colour_spec <- function(x, fill = 0) {
 
 # Expressions -------------------------------------------------------------
 
-new_vexpression <- function(x) {
+new_vexpression <- function(x = expression()) {
   if (!is.expression(x)) {
     x <- as.expression(x)
     if (!is.expression(x)) {
@@ -102,12 +102,51 @@ new_vexpression <- function(x) {
   new_vctr(as.list(x), class = "vexpression")
 }
 
+
+# Expression boilerplate --------------------------------------------------
+
+#' @export
+vec_ptype2.vexpression.vexpression <- function(x, y, ...) new_vexpression()
+
+#' @export
+vec_ptype2.vexpression.character <- function(x, y, ...) new_vexpression()
+
+#' @export
+vec_ptype2.vexpression.void_channel <- function(x, y, ...) new_vexpression()
+
+#' @export
+#' @method vec_ptype2.character vexpression
+vec_ptype2.character.vexpression <- function(x, y, ...) new_vexpression()
+
+#' @export
+vec_cast.vexpression.vexpression <- function(x, to, ...) x
+
+#' @export
+#' @method vec_cast.character vexpression
+vec_cast.character.vexpression <- function(x, to, ...) new_vexpression(x)
+
+#' @export
+vec_cast.vexpression.character <- function(x, to, ...) new_vexpression(x)
+
+#' @export
+vec_cast.vexpression.void_channel <- function(x, to, ...) new_vexpression(vec_data(x))
+
+# Expression functions ----------------------------------------------------
+
 as.expression.vexpression <- function(x) {
   do.call(expression, vec_data(x))
 }
 
 is_alt_language <- function(x) {
   is.language(x) || inherits(x, "vexpression")
+}
+
+unwrap_vexpr <- function(x) {
+  if (inherits(x, "vexpression")) {
+    as.expression(x)
+  } else {
+   x
+  }
 }
 
 unwrap_language <- function(x) {

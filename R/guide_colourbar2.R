@@ -152,6 +152,7 @@ guide_train.colourbar2 <- function(guide, scale, aesthetic = NULL) {
   ))
   ticks$.value <- vec_data(breaks)[[channel]]
   ticks$.label <- without_nas(vec_data(labels)[[channel]])
+  ticks$.label <- unwrap_vexpr(ticks$.label)
   guide$key <- ticks
 
   .limits <- without_nas(as.list(vec_data(limits))[channel])

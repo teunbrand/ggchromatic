@@ -246,11 +246,11 @@ guide_gengrob.colourrect <- function(guide, theme) {
   )
   gt <- gtable_add_grob(
     gt, titles$xtitle, clip = "off",
-    t = ypos + 4, r = xpos, l = xpos, b = ypos + 4, name = "y_labels"
+    t = ypos + 4, r = xpos, l = xpos, b = ypos + 4, name = "x_title"
   )
   gt <- gtable_add_grob(
     gt, titles$ytitle, clip = "off",
-    t = ypos, r = xpos - 4, l = xpos - 4, b = ypos, name = "y_labels"
+    t = ypos, r = xpos - 4, l = xpos - 4, b = ypos, name = "y_title"
   )
   gt
 
@@ -330,6 +330,7 @@ build_rect_axes <- function(guide, theme, params) {
   values <- c(values, rep(list(numeric()), 2 - length(values)))
   .labels <- split(key$.label, key$.channel)
   .labels <- c(.labels, rep(list(character()), 2 - length(.labels)))
+  .labels <- lapply(.labels, unwrap_vexpr)
 
   ticklength <- 0.05
 
@@ -369,7 +370,8 @@ build_rect_axes <- function(guide, theme, params) {
   label.theme <- guide$label.theme %||% calc_element("legend.text", theme)
 
   if (guide$label && length(.labels[[1]]) > 0) {
-    height <- convertUnit(stringHeight(.labels[[1]]), "cm", valueOnly = TRUE)
+    height <- convertUnit(stringHeight(.labels[[1]]),
+                          "cm", valueOnly = TRUE)
     height <- max(height)
     xlabs <- element_grob(
       label.theme,
