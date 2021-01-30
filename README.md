@@ -10,6 +10,8 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![R-CMD-check](https://github.com/teunbrand/ggchromatic/workflows/R-CMD-check/badge.svg)](https://github.com/teunbrand/ggchromatic/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/teunbrand/ggchromatic/branch/master/graph/badge.svg)](https://codecov.io/gh/teunbrand/ggchromatic?branch=master)
 <!-- badges: end -->
 
 The ‘ggchromatic’ package provides additional colour and fill scales to
