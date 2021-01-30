@@ -35,3 +35,4 @@ functions.
 * Support for HCL colour space.
 * Support for CMYK colour space.
 * Support for CMY colour space.
+* Support for CIE-L*a*b* colour space.

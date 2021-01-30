@@ -20,6 +20,9 @@
 \alias{scale_colour_cmy}
 \alias{scale_fill_cmy}
 \alias{scale_color_cmy}
+\alias{scale_colour_lab}
+\alias{scale_fill_lab}
+\alias{scale_color_lab}
 \title{Colour space scales}
 \usage{
 scale_colour_rgb(..., aesthetics = "colour")
@@ -45,6 +48,10 @@ scale_fill_cmyk(..., aesthetics = "fill")
 scale_colour_cmy(..., aesthetics = "colour")
 
 scale_fill_cmy(..., aesthetics = "fill")
+
+scale_colour_lab(..., aesthetics = "colour")
+
+scale_fill_lab(..., aesthetics = "fill")
 }
 \arguments{
 \item{...}{

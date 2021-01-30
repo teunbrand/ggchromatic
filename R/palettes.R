@@ -25,6 +25,7 @@
 #' hcl_palette(hcl_spec(0.034, 0.995, 0.532))
 #' cmyk_palette(cmyk_spec(0, 1, 1, 0))
 #' cmy_palette(cmy_spec(0, 1, 1))
+#' lab_palette(lab_spec(0.5, 1, 1))
 NULL
 
 # RGB ---------------------------------------------------------------------
@@ -86,6 +87,19 @@ cmy_palette <- function(x, min = 0, max = 1) {
   check_palette(x, "cmy")
   x <- pal_transform(x, min, max, 1, 1, 1)
   encode_colour(x, from = "cmy")
+}
+
+
+# L*a*b* ------------------------------------------------------------------
+
+#' @export
+#' @describeIn colourspace_palettes Lightness*, a* (green-red axis), b*
+#'   (blue-yellow axis) colour space. Also known as CIE L*ab.
+lab_palette <- function(x, min = 0, max = 1) {
+  check_palette(x, "lab")
+  x <- pal_transform(x, min, max, 100, 200, 200)
+  x[, 2:3] <- x[, 2:3] - 100
+  encode_colour(x, from = "lab")
 }
 
 # Helpers -----------------------------------------------------------------

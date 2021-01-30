@@ -91,3 +91,12 @@ cmy_spec <- function(c = double(),
                      y = double()) {
   new_colour_spec(c = c, m = m, y = y, class = "cmy_spec")
 }
+
+#' @export
+#' @describeIn colour_spec Lightness*, a* (green-red axis), b* (blue-yellow
+#'   axis) colour space. Also known as CIE L*ab.
+lab_spec <- function(l = double(),
+                     a = double(),
+                     b = double()) {
+  new_colour_spec(l = l, a = a, b = b, class = "lab_spec")
+}

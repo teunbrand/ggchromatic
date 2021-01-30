@@ -17,6 +17,8 @@
 #'  * `scale_*_hcl()`: Hue, Chroma and Luminance colour space.
 #'  * `scale_*_cmyk()`: Cyan, Magenta, Yellow and Key (black) colour space.
 #'  * `scale_*_cmy()`: Cyan, Magenta and Yellow colour space.
+#'  * `scale_*_lab()`: Lightness*, a* (green-red axis), b* (blue-yellow
+#'   axis) colour space. Also known as CIE-L*a*b*.
 #'
 #' @note Specifying `limits`, `breaks` and `labels` works slightly differently
 #'  compared to ggplot2, as these are needed for every channel in a colour
@@ -197,5 +199,27 @@ scale_fill_cmy <- function(..., aesthetics = "fill") {
 #' @rdname scale_chromatic
 #' @usage NULL
 scale_color_cmy <- scale_colour_cmy
+
+# L*a*b* ------------------------------------------------------------------
+
+#' @export
+#' @rdname scale_chromatic
+scale_colour_lab <- function(..., aesthetics = "colour") {
+  chromatic_scale(aesthetics, "colour_lab", lab_palette, ...,
+                  prototype = lab_spec)
+}
+
+#' @export
+#' @rdname scale_chromatic
+scale_fill_lab <- function(..., aesthetics = "fill") {
+  chromatic_scale(aesthetics, "fill_lab", lab_palette, ...,
+                  prototype = lab_spec)
+}
+
+#' @export
+#' @rdname scale_chromatic
+#' @usage NULL
+scale_color_lab <- scale_colour_lab
+
 
 

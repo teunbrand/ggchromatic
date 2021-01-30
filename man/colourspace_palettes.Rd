@@ -8,6 +8,7 @@
 \alias{hcl_palette}
 \alias{cmyk_palette}
 \alias{cmy_palette}
+\alias{lab_palette}
 \title{Colour space palettes}
 \usage{
 rgb_palette(x, min = 0, max = 1)
@@ -21,6 +22,8 @@ hcl_palette(x, min = 0, max = 1)
 cmyk_palette(x, min = 0, max = 1)
 
 cmy_palette(x, min = 0, max = 1)
+
+lab_palette(x, min = 0, max = 1)
 }
 \arguments{
 \item{x}{An \code{colour_spec} vector with a \code{numeric} vector in every channel.}
@@ -54,6 +57,9 @@ the \code{\link[farver:encode_colour]{farver::encode_colour()}} function.
 space.
 
 \item \code{cmy_palette}: Cyan, Magenta and Yellow colour space.
+
+\item \code{lab_palette}: Lightness*, a* (green-red axis), b*
+(blue-yellow axis) colour space. Also known as CIE L*ab.
 }}
 
 \examples{

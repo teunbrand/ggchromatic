@@ -8,6 +8,7 @@
 \alias{rgb_spec}
 \alias{cmyk_spec}
 \alias{cmy_spec}
+\alias{lab_spec}
 \title{Colour space vectors}
 \usage{
 hcl_spec(h = double(), c = double(), l = double())
@@ -21,6 +22,8 @@ rgb_spec(r = double(), g = double(), b = double())
 cmyk_spec(c = double(), m = double(), y = double(), k = double())
 
 cmy_spec(c = double(), m = double(), y = double())
+
+lab_spec(l = double(), a = double(), b = double())
 }
 \arguments{
 \item{h, c, l, s, v, r, g, b, m, y, k}{Colour channels. Abbreviations are colour space
@@ -61,6 +64,9 @@ different colour space \code{cmy_spec(3, "D", 4)}.
 \item \code{cmyk_spec}: Cyan, Magenta, Yellow and Key (black) colour space.
 
 \item \code{cmy_spec}: Cyan, Magenta and Yellow colour space.
+
+\item \code{lab_spec}: Lightness*, a* (green-red axis), b* (blue-yellow
+axis) colour space. Also known as CIE L*ab.
 }}
 
 \examples{
