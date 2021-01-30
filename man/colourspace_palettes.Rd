@@ -9,6 +9,7 @@
 \alias{cmyk_palette}
 \alias{cmy_palette}
 \alias{lab_palette}
+\alias{lch_palette}
 \alias{oklab_palette}
 \title{Colour space palettes}
 \usage{
@@ -25,6 +26,8 @@ cmyk_palette(x, min = 0, max = 1)
 cmy_palette(x, min = 0, max = 1)
 
 lab_palette(x, min = 0, max = 1)
+
+lch_palette(x, min = 0, max = 1)
 
 oklab_palette(x, min = 0, max = 1)
 }
@@ -63,6 +66,9 @@ space.
 
 \item \code{lab_palette}: Lightness*, a* (green-red axis), b*
 (blue-yellow axis) colour space. Also known as CIE L*ab.
+
+\item \code{lch_palette}: Lightness*, Chroma*, Hue-angle  colour
+space. Also known as CIE LCh.
 
 \item \code{oklab_palette}: An OK Lightness, a (green-red axis), b
 (blue-yellow axis) colour space. Also known as OKLab. Needs farver package

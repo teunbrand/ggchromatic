@@ -23,6 +23,12 @@
 \alias{scale_colour_lab}
 \alias{scale_fill_lab}
 \alias{scale_color_lab}
+\alias{scale_colour_lch}
+\alias{scale_fill_lch}
+\alias{scale_color_lch}
+\alias{scale_colour_oklab}
+\alias{scale_fill_oklab}
+\alias{scale_color_oklab}
 \title{Colour space scales}
 \usage{
 scale_colour_rgb(..., aesthetics = "colour")
@@ -52,6 +58,14 @@ scale_fill_cmy(..., aesthetics = "fill")
 scale_colour_lab(..., aesthetics = "colour")
 
 scale_fill_lab(..., aesthetics = "fill")
+
+scale_colour_lch(..., aesthetics = "colour")
+
+scale_fill_lch(..., aesthetics = "fill")
+
+scale_colour_oklab(..., aesthetics = "colour")
+
+scale_fill_oklab(..., aesthetics = "fill")
 }
 \arguments{
 \item{...}{
@@ -192,6 +206,10 @@ by omission, and set the literal labels for \emph{value}.
 \item \verb{scale_*_hcl()}: Hue, Chroma and Luminance colour space.
 \item \verb{scale_*_cmyk()}: Cyan, Magenta, Yellow and Key (black) colour space.
 \item \verb{scale_*_cmy()}: Cyan, Magenta and Yellow colour space.
+\item \verb{scale_*_lab()}: Lightness*, a* (green-red axis), b* (blue-yellow axis)
+colour space. Also known as CIE-L\emph{a}b*.
+\item \verb{scale_*_lch()}: Lightness*, Chroma*, Hue-angle colour space. Also known
+as CIE LCh.
 }
 }
 

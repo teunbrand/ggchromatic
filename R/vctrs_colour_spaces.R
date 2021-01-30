@@ -102,6 +102,15 @@ lab_spec <- function(l = double(),
 }
 
 #' @export
+#' @describeIn colour_spec Lightness*, Chroma*, Hue-angle  colour space.
+#' Also known as CIE LCh.
+lch_spec <- function(l = double(),
+                     c = double(),
+                     h = double()) {
+  new_colour_spec(l = l, c = c, h = h, class = "lch_spec")
+}
+
+#' @export
 #' @describeIn colour_spec An OK Lightness, a (green-red axis), b (blue-yellow
 #'   axis) colour space. Also known as OKLab. Needs farver package version
 #'   \>2.0.3.

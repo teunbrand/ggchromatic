@@ -9,6 +9,7 @@
 \alias{cmyk_spec}
 \alias{cmy_spec}
 \alias{lab_spec}
+\alias{lch_spec}
 \alias{oklab_spec}
 \title{Colour space vectors}
 \usage{
@@ -25,6 +26,8 @@ cmyk_spec(c = double(), m = double(), y = double(), k = double())
 cmy_spec(c = double(), m = double(), y = double())
 
 lab_spec(l = double(), a = double(), b = double())
+
+lch_spec(l = double(), c = double(), h = double())
 
 oklab_spec(l = double(), a = double(), b = double())
 }
@@ -70,6 +73,9 @@ different colour space \code{cmy_spec(3, "D", 4)}.
 
 \item \code{lab_spec}: Lightness*, a* (green-red axis), b* (blue-yellow
 axis) colour space. Also known as CIE L*ab.
+
+\item \code{lch_spec}: Lightness*, Chroma*, Hue-angle  colour space.
+Also known as CIE LCh.
 
 \item \code{oklab_spec}: An OK Lightness, a (green-red axis), b (blue-yellow
 axis) colour space. Also known as OKLab. Needs farver package version

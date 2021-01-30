@@ -103,6 +103,17 @@ lab_palette <- function(x, min = 0, max = 1) {
   encode_colour(x, from = "lab")
 }
 
+# LCh ---------------------------------------------------------------------
+
+#' @export
+#' @describeIn colourspace_palettes Lightness*, Chroma*, Hue-angle  colour
+#'   space. Also known as CIE LCh.
+lch_palette <- function(x, min = 0, max = 1) {
+  check_palette(x, "lch")
+  x <- pal_transform(x, min, max, 100, 133.8, 359.7)
+  encode_colour(x, from = "lch")
+}
+
 # OK Lab ------------------------------------------------------------------
 
 #' @export
