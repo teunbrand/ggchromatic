@@ -65,3 +65,7 @@ hcl_palette(hcl_spec(0.034, 0.995, 0.532))
 cmyk_palette(cmyk_spec(0, 1, 1, 0))
 cmy_palette(cmy_spec(0, 1, 1))
 }
+\seealso{
+The \link{colour_spec} page for building colour space vectors. The
+\link{scale_chromatic} page for the scales wherein these palettes are used.
+}

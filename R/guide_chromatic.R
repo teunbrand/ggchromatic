@@ -20,7 +20,7 @@
 #'
 #' @return A `chromatic_guide` S3 object.
 #' @export
-#' @seealso The [scales_chromatic] page for chromatic scales.
+#' @seealso The [scale_chromatic] page for chromatic scales.
 #' @family guides for chromatic scales
 #'
 #' @examples

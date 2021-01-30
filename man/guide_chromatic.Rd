@@ -59,7 +59,7 @@ g + geom_raster(aes(fill = cmy_spec(x, z)))
 g + geom_raster(aes(fill = cmy_spec(z)))
 }
 \seealso{
-The \link{scales_chromatic} page for chromatic scales.
+The \link{scale_chromatic} page for chromatic scales.
 
 Other guides for chromatic scales: 
 \code{\link{guide_colourbar2}()},
