@@ -97,9 +97,25 @@ cmy_palette <- function(x, min = 0, max = 1) {
 #'   (blue-yellow axis) colour space. Also known as CIE L*ab.
 lab_palette <- function(x, min = 0, max = 1) {
   check_palette(x, "lab")
-  x <- pal_transform(x, min, max, 100, 200, 200)
-  x[, 2:3] <- x[, 2:3] - 100
+  x <- pal_transform(x, min, max, 100, 184.4, 202.3)
+  x[, 2] <- x[, 2] - 86.2
+  x[, 3] <- x[, 3] - 107.8
   encode_colour(x, from = "lab")
+}
+
+# OK Lab ------------------------------------------------------------------
+
+#' @export
+#' @describeIn colourspace_palettes An OK Lightness, a (green-red axis), b
+#'   (blue-yellow axis) colour space. Also known as OKLab. Needs farver package
+#'   version \>2.0.3.
+oklab_palette <- function(x, min = 0, max = 1) {
+  abort_farver("2.0.3", "(dev)")
+  check_palette(x, "oklab")
+  x <- pal_transform(x, min, max, 1, 0.51, 0.51)
+  x[, 2] <- x[, 2] - 0.23
+  x[, 3] <- x[, 3] - 0.31
+  encode_colour(x, from = "oklab")
 }
 
 # Helpers -----------------------------------------------------------------
@@ -126,4 +142,15 @@ check_palette <- function(x, type) {
       "The `{pal}` only applies to `{vec}` vectors, not `{input}` objects."
     ))
   }
+}
+
+# This is the function used to determine how [0-1] input should be transformed
+# to get to the range the palette handles.
+estimate_palette <- function(space) {
+  colours <- c(rainbow(1000), colors())
+  space <- farver::decode_colour(colours, to = space)
+  space <- apply(space, 2, function(x) {
+    c(min = min(x), max = max(x), diff = diff(range(x)))
+  })
+  return(space)
 }

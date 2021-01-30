@@ -8,6 +8,8 @@
 #' @importFrom stats setNames
 #' @importFrom utils head tail
 #' @importFrom farver encode_colour
+#' @importFrom grDevices colors rainbow
+#' @importFrom utils packageVersion
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage

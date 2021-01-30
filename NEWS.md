@@ -36,3 +36,5 @@ functions.
 * Support for CMYK colour space.
 * Support for CMY colour space.
 * Support for CIE-L*a*b* colour space.
+* Provisional support for OKLab colour space (needs development version of the
+  farver package >2.0.3).

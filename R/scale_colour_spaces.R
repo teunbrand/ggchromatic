@@ -222,4 +222,26 @@ scale_fill_lab <- function(..., aesthetics = "fill") {
 scale_color_lab <- scale_colour_lab
 
 
+# OK Lab ------------------------------------------------------------------
+
+#' @export
+#' @rdname scale_chromatic
+scale_colour_oklab <- function(..., aesthetics = "colour") {
+  abort_farver("2.0.3", "(dev)")
+  chromatic_scale(aesthetics, "colour_oklab", oklab_palette, ...,
+                  prototype = oklab_spec)
+}
+
+#' @export
+#' @rdname scale_chromatic
+scale_fill_oklab <- function(..., aesthetics = "fill") {
+  abort_farver("2.0.3", "(dev)")
+  chromatic_scale(aesthetics, "fill_oklab", oklab_palette, ...,
+                  prototype = oklab_spec)
+}
+
+#' @export
+#' @rdname scale_chromatic
+#' @usage NULL
+scale_color_oklab <- scale_colour_oklab
 

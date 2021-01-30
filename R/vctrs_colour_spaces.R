@@ -3,10 +3,10 @@
 #' These functions create vectors that store values specifying different
 #' channels in a colour space.
 #'
-#' @param h,c,l,s,v,r,g,b,m,y,k Colour channels. Abbreviations are colour space
-#'   specific and written in full in the **Functions** section. Can be a mix of
-#'   `logical`, `integer`, `double`, `character` or `factor` vectors of equal
-#'   length or length 1.
+#' @param h,c,l,s,v,r,g,b,m,y,k,a Colour channels. Abbreviations are colour
+#'   space specific and written in full in the **Functions** section. Can be a
+#'   mix of `logical`, `integer`, `double`, `character` or `factor` vectors of
+#'   equal length or length 1.
 #'
 #' @details These constructors are convenient for creating vectors that can be
 #'   supplied to the `aes()` function in ggplot2. During plot building, a
@@ -99,4 +99,15 @@ lab_spec <- function(l = double(),
                      a = double(),
                      b = double()) {
   new_colour_spec(l = l, a = a, b = b, class = "lab_spec")
+}
+
+#' @export
+#' @describeIn colour_spec An OK Lightness, a (green-red axis), b (blue-yellow
+#'   axis) colour space. Also known as OKLab. Needs farver package version
+#'   \>2.0.3.
+oklab_spec <- function(l = double(),
+                       a = double(),
+                       b = double()) {
+  abort_farver("2.0.3", "(dev)")
+  new_colour_spec(l = l, a = a, b = b, class = "oklab_spec")
 }

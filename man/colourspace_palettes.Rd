@@ -9,6 +9,7 @@
 \alias{cmyk_palette}
 \alias{cmy_palette}
 \alias{lab_palette}
+\alias{oklab_palette}
 \title{Colour space palettes}
 \usage{
 rgb_palette(x, min = 0, max = 1)
@@ -24,6 +25,8 @@ cmyk_palette(x, min = 0, max = 1)
 cmy_palette(x, min = 0, max = 1)
 
 lab_palette(x, min = 0, max = 1)
+
+oklab_palette(x, min = 0, max = 1)
 }
 \arguments{
 \item{x}{An \code{colour_spec} vector with a \code{numeric} vector in every channel.}
@@ -60,6 +63,10 @@ space.
 
 \item \code{lab_palette}: Lightness*, a* (green-red axis), b*
 (blue-yellow axis) colour space. Also known as CIE L*ab.
+
+\item \code{oklab_palette}: An OK Lightness, a (green-red axis), b
+(blue-yellow axis) colour space. Also known as OKLab. Needs farver package
+version \>2.0.3.
 }}
 
 \examples{
@@ -70,6 +77,7 @@ hsl_palette(hsl_spec(0, 1, 0.5))
 hcl_palette(hcl_spec(0.034, 0.995, 0.532))
 cmyk_palette(cmyk_spec(0, 1, 1, 0))
 cmy_palette(cmy_spec(0, 1, 1))
+lab_palette(lab_spec(0.5, 1, 1))
 }
 \seealso{
 The \link{colour_spec} page for building colour space vectors. The

@@ -107,3 +107,11 @@ globalVariables(
   c("x", "y", "z"),
   package = "ggchromatic"
 )
+
+abort_farver <- function(version = "2.0.3", comment = "(dev)") {
+  if (!(packageVersion("farver") > version)) {
+    rlang::abort(glue::glue(
+      "Need `farver` package version >{version} {comment}."
+    ))
+  }
+}

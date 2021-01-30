@@ -9,6 +9,7 @@
 \alias{cmyk_spec}
 \alias{cmy_spec}
 \alias{lab_spec}
+\alias{oklab_spec}
 \title{Colour space vectors}
 \usage{
 hcl_spec(h = double(), c = double(), l = double())
@@ -24,12 +25,14 @@ cmyk_spec(c = double(), m = double(), y = double(), k = double())
 cmy_spec(c = double(), m = double(), y = double())
 
 lab_spec(l = double(), a = double(), b = double())
+
+oklab_spec(l = double(), a = double(), b = double())
 }
 \arguments{
-\item{h, c, l, s, v, r, g, b, m, y, k}{Colour channels. Abbreviations are colour space
-specific and written in full in the \strong{Functions} section. Can be a mix of
-\code{logical}, \code{integer}, \code{double}, \code{character} or \code{factor} vectors of equal
-length or length 1.}
+\item{h, c, l, s, v, r, g, b, m, y, k, a}{Colour channels. Abbreviations are colour
+space specific and written in full in the \strong{Functions} section. Can be a
+mix of \code{logical}, \code{integer}, \code{double}, \code{character} or \code{factor} vectors of
+equal length or length 1.}
 }
 \value{
 An \code{colour_spec}, \code{vctrs_rcrd} S3 vector.
@@ -67,6 +70,10 @@ different colour space \code{cmy_spec(3, "D", 4)}.
 
 \item \code{lab_spec}: Lightness*, a* (green-red axis), b* (blue-yellow
 axis) colour space. Also known as CIE L*ab.
+
+\item \code{oklab_spec}: An OK Lightness, a (green-red axis), b (blue-yellow
+axis) colour space. Also known as OKLab. Needs farver package version
+\>2.0.3.
 }}
 
 \examples{
