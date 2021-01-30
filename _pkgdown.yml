@@ -1,0 +1,49 @@
+reference:
+- title: "Chromatic colour and fill scales"
+  desc: >
+    Functions for manipulating the colour and fill scales, such as setting
+    limits, breaks, labels and channel limits.
+- contents:
+  - chromatic_scale
+  - scale_colour_rgb
+  - scale_colour_hsv
+  - scale_colour_hsl
+  - scale_colour_hcl
+  - scale_colour_cmyk
+  - scale_colour_cmy
+  - scale_fill_rgb
+  - scale_fill_hsv
+  - scale_fill_hsl
+  - scale_fill_hcl
+  - scale_fill_cmyk
+  - scale_fill_cmy
+- title: "Colour space vectors"
+  desc: >
+    Functions for constructing colour space vectors.
+- contents:
+  - rgb_spec
+  - hsv_spec
+  - hsl_spec
+  - hcl_spec
+  - cmyk_spec
+  - cmy_spec
+- title: "Palettes"
+  desc: >
+    Palette functions that take colour space vectors as input and generate
+    hexadecimally notated colours as character vectors.
+- contents:
+  - rgb_palette
+  - hsv_palette
+  - hsl_palette
+  - hcl_palette
+  - cmyk_palette
+  - cmy_palette
+- title: "Guides for chromatic scales"
+  desc: >
+    Guides that specialise in displaying colour channel mapping from chromatic
+    scales.
+- contents:
+  - guide_chromatic
+  - guide_colourcube
+  - guide_colourrect
+  - guide_colourbar2

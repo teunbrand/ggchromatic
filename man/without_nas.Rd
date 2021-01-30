@@ -18,3 +18,4 @@ This is a simple helper for some of the internals.
 \examples{
 without_nas(c(NA, 2))
 }
+\keyword{internal}

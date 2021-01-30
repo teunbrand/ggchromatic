@@ -21,3 +21,4 @@ This is a simple helper for some of the internals.
 \examples{
 pad_nas(1, 2)
 }
+\keyword{internal}

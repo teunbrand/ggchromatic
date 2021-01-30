@@ -10,6 +10,7 @@
 #' @return A vector of length `size` or list wherein elements are of length
 #'   `size`.
 #' @export
+#' @keywords internal
 #'
 #' @examples
 #' pad_nas(1, 2)
@@ -48,6 +49,8 @@ pad_nas.vexpression <- function(x, size = max(length(x))) {
 #'
 #' @return A vector or `list` without `NA`s.
 #' @export
+#'
+#' @keywords internal
 #'
 #' @examples
 #' without_nas(c(NA, 2))
