@@ -26,6 +26,7 @@
 #' cmyk_palette(cmyk_spec(0, 1, 1, 0))
 #' cmy_palette(cmy_spec(0, 1, 1))
 #' lab_palette(lab_spec(0.5, 1, 1))
+#' lch_palette(lch_spec(0.53, 0.79, 0.11))
 NULL
 
 # RGB ---------------------------------------------------------------------
@@ -129,6 +130,18 @@ oklab_palette <- function(x, min = 0, max = 1) {
   encode_colour(x, from = "oklab")
 }
 
+# OK Lch ------------------------------------------------------------------
+
+#' @export
+#' @describeIn colourspace_palettes An OK Lightness*, Chroma*, Hue-angle colour
+#'   space. Also known as OKLch. Needs farver package version \>2.0.3.
+oklch_palette <- function(x, min = 0, max = 1) {
+  abort_farver("2.0.3", "(dev)")
+  check_palette(x, "oklch")
+  x <- pal_transform(x, min, max, 1, 0.323, 360)
+  encode_colour(x, from = "oklch")
+}
+
 # Helpers -----------------------------------------------------------------
 
 # The dot argument should contain scaling factors for the range that the
@@ -157,6 +170,8 @@ check_palette <- function(x, type) {
 
 # This is the function used to determine how [0-1] input should be transformed
 # to get to the range the palette handles.
+# Please leave an issue on the github page if you think this has blind spots
+# that I should be aware of, you're reading the source code anyway :)
 estimate_palette <- function(space) {
   colours <- c(rainbow(1000), colors())
   space <- farver::decode_colour(colours, to = space)

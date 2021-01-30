@@ -37,5 +37,5 @@ functions.
 * Support for CMY colour space.
 * Support for CIE-Lab* colour space.
 * Support for CIE-LCh colour space.
-* Provisional support for OKLab colour space (needs development version of the
-  farver package >2.0.3).
+* Provisional support for OKLab and OKLch colour spaces (needs development 
+  version of the farver package >2.0.3).

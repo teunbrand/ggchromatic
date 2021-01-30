@@ -29,6 +29,9 @@
 \alias{scale_colour_oklab}
 \alias{scale_fill_oklab}
 \alias{scale_color_oklab}
+\alias{scale_colour_oklch}
+\alias{scale_fill_oklch}
+\alias{scale_color_oklch}
 \title{Colour space scales}
 \usage{
 scale_colour_rgb(..., aesthetics = "colour")
@@ -66,6 +69,10 @@ scale_fill_lch(..., aesthetics = "fill")
 scale_colour_oklab(..., aesthetics = "colour")
 
 scale_fill_oklab(..., aesthetics = "fill")
+
+scale_colour_oklch(..., aesthetics = "colour")
+
+scale_fill_oklch(..., aesthetics = "fill")
 }
 \arguments{
 \item{...}{

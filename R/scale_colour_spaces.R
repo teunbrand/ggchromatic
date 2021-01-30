@@ -268,3 +268,25 @@ scale_fill_oklab <- function(..., aesthetics = "fill") {
 #' @usage NULL
 scale_color_oklab <- scale_colour_oklab
 
+# OK Lch ------------------------------------------------------------------
+
+#' @export
+#' @rdname scale_chromatic
+scale_colour_oklch <- function(..., aesthetics = "colour") {
+  abort_farver("2.0.3", "(dev)")
+  chromatic_scale(aesthetics, "colour_oklch", oklch_palette, ...,
+                  prototype = oklch_spec)
+}
+
+#' @export
+#' @rdname scale_chromatic
+scale_fill_oklch <- function(..., aesthetics = "fill") {
+  abort_farver("2.0.3", "(dev)")
+  chromatic_scale(aesthetics, "fill_oklch", oklch_palette, ...,
+                  prototype = oklch_spec)
+}
+
+#' @export
+#' @rdname scale_chromatic
+#' @usage NULL
+scale_color_oklch <- scale_colour_oklch

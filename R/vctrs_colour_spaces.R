@@ -120,3 +120,13 @@ oklab_spec <- function(l = double(),
   abort_farver("2.0.3", "(dev)")
   new_colour_spec(l = l, a = a, b = b, class = "oklab_spec")
 }
+
+#' @export
+#' @describeIn colour_spec An OK Lightness*, Chroma*, Hue-angle  colour space.
+#' Also known as OKLch. Needs farver package version \>2.0.3.
+oklch_spec <- function(l = double(),
+                       c = double(),
+                       h = double()) {
+  abort_farver("2.0.3", "(dev)")
+  new_colour_spec(l = l, c = c, h = h, class = "oklch_spec")
+}

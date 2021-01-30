@@ -11,6 +11,7 @@
 \alias{lab_palette}
 \alias{lch_palette}
 \alias{oklab_palette}
+\alias{oklch_palette}
 \title{Colour space palettes}
 \usage{
 rgb_palette(x, min = 0, max = 1)
@@ -30,6 +31,8 @@ lab_palette(x, min = 0, max = 1)
 lch_palette(x, min = 0, max = 1)
 
 oklab_palette(x, min = 0, max = 1)
+
+oklch_palette(x, min = 0, max = 1)
 }
 \arguments{
 \item{x}{An \code{colour_spec} vector with a \code{numeric} vector in every channel.}
@@ -73,6 +76,9 @@ space. Also known as CIE LCh.
 \item \code{oklab_palette}: An OK Lightness, a (green-red axis), b
 (blue-yellow axis) colour space. Also known as OKLab. Needs farver package
 version \>2.0.3.
+
+\item \code{oklch_palette}: An OK Lightness*, Chroma*, Hue-angle colour
+space. Also known as OKLch. Needs farver package version \>2.0.3.
 }}
 
 \examples{
