@@ -189,7 +189,39 @@ by omission, and set the literal labels for \emph{value}.
 }
 
 \examples{
-NULL
+# Empty channels will take the midpoint of the channel limits.
+# Note that the 'luminance' channel is missing below.
+p <- ggplot(economics, aes(date, unemploy)) +
+  geom_point(aes(colour = hcl_spec(pop, psavert)))
+p
+
+# You can set the output of missing channels through the channel limits.
+# Setting 1 value fixes the output for that channel.
+p + scale_colour_hcl(channel_limits = list(l = 0.8))
+
+# Alternatively, you can constrain the output of particular channels.
+# Setting 2 values between 0-1 restricts the channel output range.
+p <- ggplot(economics, aes(date, unemploy)) +
+  geom_point(aes(colour = hcl_spec(pop, psavert, pce)))
+p + scale_colour_hcl(channel_limits = list(l = c(0.5, 1), c = c(0.2, 0.8)))
+
+# Setting breaks, labels and limits through named lists
+p + scale_colour_hcl(
+  breaks = list(c = c(5, 10, 15)),
+  labels = list(h = scales::number_format(scale = 1e-3, suffix = "K")),
+  limits = list(h = c(200e3, 300e3), c = c(5, 15), l = c(3000, 9000)),
+  oob = scales::oob_squish
+)
+
+# Scale can have names for every channel to be displayed in the guide
+p + scale_colour_hcl(name = c("Hue", "Chroma", "Luminance"))
+
+# Scale can handle all-discrete variables
+p <- ggplot(iris, aes(Sepal.Width, Sepal.Length))
+p + geom_point(aes(colour = rgb_spec(Species, sample(Species), sample(Species))))
+
+# Or can handle a mix between discrete and continuous
+p + geom_point(aes(colour = cmy_spec(Petal.Length, Species, Petal.Width)))
 }
 \seealso{
 The \link{colour_spec} page for creating \code{colour_spec} vectors.
