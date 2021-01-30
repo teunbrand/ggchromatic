@@ -90,6 +90,7 @@ hcl_palette(hcl_spec(0.034, 0.995, 0.532))
 cmyk_palette(cmyk_spec(0, 1, 1, 0))
 cmy_palette(cmy_spec(0, 1, 1))
 lab_palette(lab_spec(0.5, 1, 1))
+lch_palette(lch_spec(0.53, 0.79, 0.11))
 }
 \seealso{
 The \link{colour_spec} page for building colour space vectors. The
