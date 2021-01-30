@@ -4,7 +4,9 @@ test_that("palettes can produce red", {
          hsl_palette(hsl_spec(0, 1, 0.5)),
          hcl_palette(hcl_spec(0.034, 0.995, 0.532)),
          cmyk_palette(cmyk_spec(0, 1, 1, 0)),
-         cmy_palette(cmy_spec(0, 1, 1)))
+         cmy_palette(cmy_spec(0, 1, 1)),
+         lab_palette(lab_spec(0.5, 1, 1)),
+         lch_palette(lch_spec(0.53, 0.79, 0.11)))
   x <- unique(x)
   expect_identical(x, "#FF0000")
 })

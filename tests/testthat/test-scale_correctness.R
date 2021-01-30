@@ -10,11 +10,16 @@ scales <- list(
   scale_colour_cmyk(),
   scale_fill_cmyk(),
   scale_colour_cmy(),
-  scale_fill_cmy()
+  scale_fill_cmy(),
+  scale_colour_lab(),
+  scale_fill_lab(),
+  scale_colour_lch(),
+  scale_fill_lch()
 )
 
 test_that("scale_* functions give correct prototypes", {
-  ptypes_text <- paste0(rep(c("rgb", "hsv", "hsl", "hcl", "cmyk", "cmy"),
+  ptypes_text <- paste0(rep(c("rgb", "hsv", "hsl", "hcl",
+                              "cmyk", "cmy", "lab", "lch"),
                             each = 2),
                         "_spec")
   ptypes <- lapply(scales, function(x){x$ptype()})
@@ -41,7 +46,11 @@ test_that("scale_* can map their own channel limits", {
     "#FFFFFF", "#000000",
     "#FFFFFF", "#000000",
     "#FFFFFF", "#000000",
-    "#FFFFFF", "#000000"
+    "#FFFFFF", "#000000",
+    "#0034A1", "#FF9643",
+    "#0034A1", "#FF9643",
+    "#000000", "#FF3CFF",
+    "#000000", "#FF3CFF"
   ), nrow = 2)
 
   expect_identical(map, exp)
