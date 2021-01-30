@@ -26,7 +26,19 @@
 #' @family guides for chromatic scales
 #'
 #' @examples
-#' NULL
+#' # Make a plot
+#' df <- data.frame(x = c(row(volcano)), y = c(col(volcano)), z = c(volcano))
+#' g <- ggplot(df, aes(x, y)) +
+#'   geom_raster(aes(fill = cmy_spec(x, z, y)))
+#'
+#' # Change the order of the axes
+#' g + guides(fill = guide_colourcube(rotate = c(3, 1, 2)))
+#'
+#' # Take 3 titles for every channel
+#' g + guides(fill = guide_colourcube(title = c("Cyan", "Magenta", "Yellow")))
+#'
+#' # One title becomes the main title
+#' g + guides(fill = guide_colourcube(title = "Main title"))
 guide_colourcube <- function(
   # Title
   title = waiver(),

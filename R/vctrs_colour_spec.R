@@ -117,6 +117,23 @@ spectrum_constructor <- function(x) {
   )
 }
 
+spectrum_palette <- function(x) {
+  if (is_colour_spec(x)) {
+    x <- spectrum_name(x)
+  }
+  x <- match.arg(x, c("rgb", "cmyk", "hsl", "hsv", "hcl", "cmy"))
+  switch(
+    x,
+    "rgb" = rgb_palette,
+    "hsv" = hsv_palette,
+    "hsl" = hsl_palette,
+    "cmyk" = cmyk_palette,
+    "cmy" = cmy_palette,
+    "hcl" = hcl_palette,
+    rlang::abort("Cannot find constructor for `", typeof(x), "`")
+  )
+}
+
 #' @export
 #' @method scale_type colour_spec
 scale_type.colour_spec <- function(x) {

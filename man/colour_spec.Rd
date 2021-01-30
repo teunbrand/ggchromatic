@@ -32,7 +32,7 @@ length or length 1.}
 An \code{colour_spec}, \code{vctrs_rcrd} S3 vector.
 }
 \description{
-These functions create a vectors that store values specifying different
+These functions create vectors that store values specifying different
 channels in a colour space.
 }
 \details{
@@ -41,6 +41,12 @@ supplied to the \code{aes()} function in ggplot2. During plot building, a
 chromatic colour or fill scale will be assigned to coordinate the training
 and mapping of colour space vectors. Missing channels will get placeholder
 values that will not affect scale training.
+
+The 'rule' is that your can combine two vectors of the same colour space,
+but only if the colour channels can be combined. For example, you can
+combine \code{rgb_spec(10, 5, "A")} with \code{rgb_spec(6, 2, "B")}. You can not
+combine \code{hcl_spec(7, "C", 12)} with neither \code{hcl_spec(12, 8, 9)} nor a
+different colour space \code{cmy_spec(3, "D", 4)}.
 }
 \section{Functions}{
 \itemize{
@@ -58,9 +64,23 @@ values that will not affect scale training.
 }}
 
 \examples{
-NULL
+# In combination with ggplot2
+ggplot(mtcars, aes(mpg, disp)) +
+ geom_point(aes(colour = hsv_spec(mpg, drat, wt)))
+
+# Concatenation
+c(rgb_spec(1:2, c("A", "B"), 3:2), rgb_spec(12:11, c("", "X"), 4:5))
+
+# Convert all channels to numeric matrix with `as.matrix()`
+as.matrix(hcl_spec(10:15, LETTERS[1:6], 12:7))
+
+# Using colour_spec vectors with palettes
+cmyk_palette(cmyk_spec(0.1, 0.2, 0.3, 0))
 }
 \seealso{
+\link{scale_chromatic} for the colour and fill scales that mirror these
+colour space vectors.
+
 \link[grDevices:rgb]{rgb()}, \link[grDevices:hsv]{hsv()},
 \link[grDevices:hcl]{hcl()} and \code{\link[farver:encode_colour]{farver::encode_colour()}}.
 }

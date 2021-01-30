@@ -9,9 +9,13 @@
 #'
 #' @return A `guide`, `colourbar2` S3 list object.
 #' @export
+#' @family guides for chromatic scales
 #'
 #' @examples
-#' NULL
+#' # The only extra thing is you can set the channel to display
+#' ggplot(mtcars, aes(wt, mpg)) +
+#'   geom_point(aes(colour = cmyk_spec(disp, hp, drat, qsec))) +
+#'   guides(colour = guide_colourbar2(channel = "k"))
 guide_colourbar2 <- function(
   # Title
   title = waiver(),

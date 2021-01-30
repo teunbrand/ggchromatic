@@ -18,6 +18,24 @@
 #'  * `scale_*_cmyk()`: Cyan, Magenta, Yellow and Key (black) colour space.
 #'  * `scale_*_cmy()`: Cyan, Magenta and Yellow colour space.
 #'
+#' @note Specifying `limits`, `breaks` and `labels` works slightly differently
+#'  compared to ggplot2, as these are needed for every channel in a colour
+#'  space. When providing these arguments as a vector, a `colour_spec` vector
+#'  describing the arguments for all channels is expected. If provided a
+#'  function, the function is applied to every channel. To make it easier to set
+#'  these arguments for channels individually, the preferred way is to provide
+#'  these arguments with a named list, wherein the names are the first letters
+#'  of the channels. For example, you can set the following in
+#'  `scale_colour_hsv()`:
+#'
+#'  ```{r}
+#'  labels = list(h = scales::percent, v = c("First", "Second", "Third"))
+#'  ```
+#'  To give the *hue* percent labels, use the default labels for *saturation*
+#'  by omission, and set the literal labels for *value*.
+#'
+#' @seealso The [colour_spec] page for creating `colour_spec` vectors.
+#'
 #' @examples
 #' NULL
 NULL

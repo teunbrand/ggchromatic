@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ggchromatic
+# ggchromatic <img src='man/figures/logo.png' align="right" height="138" />
 
 */ʤiː-ʤiːkrəʊˈmætɪk/*
 
@@ -18,6 +18,9 @@ number of variables to different colour spaces with the ‘farver’
 package. The package introduces ‘chromatic scales’, a term mirroring
 music terms. In music, chromatic scales cover all 12 notes. In
 ggchromatic, a chromatic scale can cover all channels in colour space.
+Admittedly, colour spaces might not be the most intuitive tool for
+interpreting a data visualisation, but can be useful for visualising
+less strict data impressions.
 
 ## Installation
 
@@ -40,7 +43,7 @@ library(ggchromatic)
 #> Loading required package: ggplot2
 
 ggplot(mtcars, aes(mpg, disp)) +
-  geom_point(aes(colour = rgb_spec(mpg, drat, wt)))
+  geom_point(aes(colour = cmy_spec(mpg, drat, wt)))
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
@@ -50,9 +53,7 @@ the HSV scale below.
 
 ``` r
 df <- data.frame(
-  x = as.vector(row(volcano)),
-  y = as.vector(col(volcano)),
-  z = as.vector(volcano)
+  x = c(row(volcano)), y = c(col(volcano)), z = c(volcano)
 )
 
 ggplot(df, aes(x, y, fill = hsv_spec(z, x, y))) +
@@ -64,3 +65,36 @@ ggplot(df, aes(x, y, fill = hsv_spec(z, x, y))) +
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
+Perhaps a use-case for chromatic scales is when the interpretation of a
+variable isn’t directly related to a property of the data points. For
+example, embeddings project data into a new space which might preserve
+some properties, such as distance between data points, but wherein
+dimensions of the new space are meaningless on their own. You can use a
+chromatic scale to map the embedding to colours, which can give a neat
+‘flavour’ to the data points through colour.
+
+``` r
+if (requireNamespace("umap")) {
+  set.seed(42)
+
+  # Project the iris dataset into 3D UMAP space
+  config <- umap::umap.defaults
+  config$n_components <- 3
+  umap_3d <- umap::umap(iris[, 1:4], config)$layout
+  
+  df <- data.frame(
+    SL = iris$Sepal.Length,
+    SW = iris$Petal.Width,
+    x = umap_3d[, 1],
+    y = umap_3d[, 2],
+    z = umap_3d[, 3]
+  )
+  
+  ggplot(df, aes(SL, SW)) +
+    geom_point(aes(colour = rgb_spec(x, y, z)))
+}
+#> Loading required namespace: umap
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />

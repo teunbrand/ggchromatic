@@ -157,11 +157,26 @@ maps two channels of a chromatic scales along the x and y axes and renders a
 rectangle raster displaying the colours.
 }
 \examples{
-NULL
+# Make basic plot
+g <- ggplot(mtcars, aes(mpg, wt)) +
+  geom_point(aes(colour = rgb_spec(as.factor(cyl), drat, qsec)))
+
+# Choose the channels
+g + guides(colour = guide_colourrect(channels = c("g", "b")))
+
+# Titles can take length 2 for the x- and y-axis.
+g + guides(
+  colour = guide_colourrect(title = c("# Cylinders", "Rear axle ratio"))
+)
+
+# If only 2 channels are specified, `guide_colourrect()` becomes the guide
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point(aes(colour = hcl_spec(drat, qsec)))
 }
 \seealso{
 Other guides for chromatic scales: 
 \code{\link{guide_chromatic}()},
+\code{\link{guide_colourbar2}()},
 \code{\link{guide_colourcube}()}
 }
 \concept{guides for chromatic scales}

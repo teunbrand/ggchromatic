@@ -6,9 +6,15 @@
 \alias{ggchromatic-package}
 \title{ggchromatic: Colourspace Scales for ggplot2}
 \description{
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+
 The 'ggchromatic' package provides additional colour and fill 
-  scales to use with 'ggplot2'. It uses the 'ggplot2' extension system to map 
-  a number of variables to different colourspaces with the 'farver' package.
+  scales to use with 'ggplot2'. Using the 'ggplot2' extension system, so called 
+  chromatic scales are able to map a mix of continuous and discrete variables to 
+  the channels of different colour spaces. The 'vctrs' package is used to wrap 
+  these variables in a vector with channels, that is used by the scales to 
+  encode them into colours using the 'farver' package. Additionally, there are
+  guides that specialise in displaying 3D or 2D colour information.
 }
 \author{
 \strong{Maintainer}: Teun van den Brand \email{tahvdbrand@gmail.com} (\href{https://orcid.org/0000-0002-9335-7468}{ORCID})

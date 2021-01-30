@@ -2,7 +2,7 @@
 #'
 #' This 'guide' is not really a guide, but a decision function for chromatic
 #' scales. It chooses the guide based on the number of channels a chromatic
-#' scale has seen data from.
+#' scale has seen data from. It is the default guide for the chromatic scales.
 #'
 #' @inheritParams ggplot2::guide_colorbar
 #' @param ... Captures arguments to pass down to the constructor of the chosen
@@ -20,10 +20,25 @@
 #'
 #' @return A `chromatic_guide` S3 object.
 #' @export
+#' @seealso The [scales_chromatic] page for chromatic scales.
 #' @family guides for chromatic scales
 #'
 #' @examples
-#' NULL
+#' # Setup example plot
+#' df <- data.frame(
+#'   x = c(row(volcano)), y = c(col(volcano)), z = c(volcano)
+#' )
+#' g <- ggplot(df, aes(x, y)) +
+#'   guides(fill = guide_chromatic())
+#'
+#' # When the colour space has 3 defined channels, it makes a cube
+#' g + geom_raster(aes(fill = cmy_spec(x, y, z)))
+#'
+#' # When 2 channels are defined, it makes a rectangle
+#' g + geom_raster(aes(fill = cmy_spec(x, z)))
+#'
+#' # One defined channel gives a colour bar
+#' g + geom_raster(aes(fill = cmy_spec(z)))
 guide_chromatic <- function(
   title = waiver(),
   ...,

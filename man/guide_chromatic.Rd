@@ -28,7 +28,7 @@ A \code{chromatic_guide} S3 object.
 \description{
 This 'guide' is not really a guide, but a decision function for chromatic
 scales. It chooses the guide based on the number of channels a chromatic
-scale has seen data from.
+scale has seen data from. It is the default guide for the chromatic scales.
 }
 \details{
 This 'guide' chooses in the following ways based on the number of
@@ -42,10 +42,27 @@ channels for which data is available.
 }
 }
 \examples{
-NULL
+# Setup example plot
+df <- data.frame(
+  x = c(row(volcano)), y = c(col(volcano)), z = c(volcano)
+)
+g <- ggplot(df, aes(x, y)) +
+  guides(fill = guide_chromatic())
+
+# When the colour space has 3 defined channels, it makes a cube
+g + geom_raster(aes(fill = cmy_spec(x, y, z)))
+
+# When 2 channels are defined, it makes a rectangle
+g + geom_raster(aes(fill = cmy_spec(x, z)))
+
+# One defined channel gives a colour bar
+g + geom_raster(aes(fill = cmy_spec(z)))
 }
 \seealso{
+The \link{scales_chromatic} page for chromatic scales.
+
 Other guides for chromatic scales: 
+\code{\link{guide_colourbar2}()},
 \code{\link{guide_colourcube}()},
 \code{\link{guide_colourrect}()}
 }

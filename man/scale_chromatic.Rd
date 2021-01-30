@@ -161,6 +161,21 @@ A \code{ScaleChromatic} ggproto object that can be added to a plot.
 These scales map the values of \code{colour_spec} vectors to coordinates in a
 colour space.
 }
+\note{
+Specifying \code{limits}, \code{breaks} and \code{labels} works slightly differently
+compared to ggplot2, as these are needed for every channel in a colour
+space. When providing these arguments as a vector, a \code{colour_spec} vector
+describing the arguments for all channels is expected. If provided a
+function, the function is applied to every channel. To make it easier to set
+these arguments for channels individually, the preferred way is to provide
+these arguments with a named list, wherein the names are the first letters
+of the channels. For example, you can set the following in
+\code{scale_colour_hsv()}:\if{html}{\out{<div class="r">}}\preformatted{labels = list(h = scales::percent, v = c("First", "Second", "Third"))
+}\if{html}{\out{</div>}}
+
+To give the \emph{hue} percent labels, use the default labels for \emph{saturation}
+by omission, and set the literal labels for \emph{value}.
+}
 \section{Functions}{
 
 \itemize{
@@ -175,4 +190,7 @@ colour space.
 
 \examples{
 NULL
+}
+\seealso{
+The \link{colour_spec} page for creating \code{colour_spec} vectors.
 }

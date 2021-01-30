@@ -12,7 +12,10 @@
 #' @name colourspace_palettes
 #'
 #' @details The conversion from `colour_spec` vectors to colour is powered by
-#'  the [farver::encode_colour()] function.
+#'   the [farver::encode_colour()] function.
+#'
+#' @seealso The [colour_spec] page for building colour space vectors. The
+#'   [scale_chromatic] page for the scales wherein these palettes are used.
 #'
 #' @examples
 #' # Getting the colour "red" in different colour spaces

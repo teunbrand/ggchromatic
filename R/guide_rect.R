@@ -25,7 +25,21 @@
 #' @family guides for chromatic scales
 #'
 #' @examples
-#' NULL
+#' # Make basic plot
+#' g <- ggplot(mtcars, aes(mpg, wt)) +
+#'   geom_point(aes(colour = rgb_spec(as.factor(cyl), drat, qsec)))
+#'
+#' # Choose the channels
+#' g + guides(colour = guide_colourrect(channels = c("g", "b")))
+#'
+#' # Titles can take length 2 for the x- and y-axis.
+#' g + guides(
+#'   colour = guide_colourrect(title = c("# Cylinders", "Rear axle ratio"))
+#' )
+#'
+#' # If only 2 channels are specified, `guide_colourrect()` becomes the guide
+#' ggplot(mtcars, aes(mpg, wt)) +
+#'   geom_point(aes(colour = hcl_spec(drat, qsec)))
 guide_colourrect <- function(
   # Title
   title = waiver(),

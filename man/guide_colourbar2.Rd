@@ -141,5 +141,15 @@ This is just like the regular \code{guide_colourbar}, but with a specialised
 training method that decodes \code{colour_spec} vectors from chromatic scales.
 }
 \examples{
-NULL
+# The only extra thing is you can set the channel to display
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(aes(colour = cmyk_spec(disp, hp, drat, qsec))) +
+  guides(colour = guide_colourbar2(channel = "k"))
 }
+\seealso{
+Other guides for chromatic scales: 
+\code{\link{guide_chromatic}()},
+\code{\link{guide_colourcube}()},
+\code{\link{guide_colourrect}()}
+}
+\concept{guides for chromatic scales}
