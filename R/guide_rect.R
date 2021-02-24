@@ -309,7 +309,7 @@ build_rect_frame <- function(guide, params) {
   if (any(guide$key$.discrete)) {
     key <- guide$key[guide$key$.discrete, ]
     if (any(key$.channel == 1)) {
-      beam <- key[key$.channel == 1]
+      beam <- key[key$.channel == 1, ]
       value <- diff(beam$.value) / 2 + head(beam$.value, -1)
       len <- length(value)
       x <- c(x, rep(value, 2))
@@ -318,7 +318,7 @@ build_rect_frame <- function(guide, params) {
       n <- length(id)
     }
     if (any(key$.channel == 2)) {
-      beam <- key[key$.channel == 2]
+      beam <- key[key$.channel == 2, ]
       value <- diff(beam$.value) / 2 + head(beam$.value, -1)
       len <- length(value)
       x <- c(x, rep(c(0, 1), each = len))
